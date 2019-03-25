@@ -70,11 +70,6 @@ namespace Milk.Window
                 SDL.SDL_SetWindowFullscreen(Window, 0);
         }
 
-        public void Free()
-        {
-            SDL.SDL_DestroyWindow(Window);
-        }
-
         public void Dispose()
         {
             SDL.SDL_DestroyWindow(Window);

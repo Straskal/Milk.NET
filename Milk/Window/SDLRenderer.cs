@@ -56,11 +56,6 @@ namespace Milk.Window
             SDL.SDL_RenderPresent(Renderer);
         }
 
-        public void Free()
-        {
-            SDL.SDL_DestroyRenderer(Renderer);
-        }
-
         public void Dispose()
         {
             SDL.SDL_DestroyRenderer(Renderer);
