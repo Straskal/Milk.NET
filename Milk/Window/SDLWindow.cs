@@ -74,6 +74,7 @@ namespace Milk.Window
         {
             SDL.SDL_DestroyWindow(Window);
             Window = IntPtr.Zero;
+            SDL.SDL_Quit();
         }
     }
 }

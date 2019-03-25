@@ -51,6 +51,9 @@ namespace Milk
                 renderer.BeginDraw();
                 renderer.EndDraw();
             }
+
+            renderer.Dispose();
+            window.Dispose();
         }
     }
 }
