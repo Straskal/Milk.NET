@@ -3,7 +3,7 @@ using System;
 
 namespace Milk.Window
 {
-    public sealed class SDLRenderer
+    public sealed class SDLRenderer : IDisposable
     {
         private bool isInitialized;
 
@@ -59,6 +59,12 @@ namespace Milk.Window
         public void Free()
         {
             SDL.SDL_DestroyRenderer(Renderer);
+        }
+
+        public void Dispose()
+        {
+            SDL.SDL_DestroyRenderer(Renderer);
+            Renderer = IntPtr.Zero;
         }
     }
 }
