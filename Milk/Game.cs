@@ -8,20 +8,20 @@ namespace Milk
     /// </summary>
     public sealed class Game
     {
-        private SDLWindow window;
-        private SDLRenderer renderer;
+        private GameWindow window;
+        private Renderer renderer;
         private bool isRunning;
 
         public bool Initialize()
         {
-            window = new SDLWindow();
+            window = new GameWindow();
 
             if (!window.Initialize("milk", 800, 600, false))
                 return false;
 
-            renderer = new SDLRenderer();
+            renderer = new Renderer();
 
-            if (!renderer.Initialize(window.Window, 640, 360))
+            if (!renderer.Initialize(window.Handle, 640, 360))
                 return false;
 
             return true;

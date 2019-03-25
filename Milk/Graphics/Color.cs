@@ -21,6 +21,11 @@ namespace Milk.Graphics
         public static Color Black => new Color(0x00, 0x00, 0x00, 0xFF);
 
         public bool Equals(Color other)
-            => r == other.r && b == other.b && g == other.g && a == other.a;
+        {
+            return r == other.r 
+                && b == other.b 
+                && g == other.g 
+                && a == other.a;
+        }
     }
 }

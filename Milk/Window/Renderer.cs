@@ -3,22 +3,24 @@ using System;
 
 namespace Milk.Window
 {
-    public sealed class SDLRenderer : IDisposable
+    public sealed class Renderer : IDisposable
     {
         private bool isInitialized;
 
-        public SDLRenderer()
+        public Renderer()
         {
             isInitialized = false;
+
+            Handle = IntPtr.Zero;
             ResolutionWidth = 0;
             ResolutionHeight = 0;
         }
 
-        public IntPtr Renderer { get; private set; }
+        public IntPtr Handle { get; private set; }
         public int ResolutionWidth { get; private set; }
         public int ResolutionHeight { get; private set; }
 
-        public bool Initialize(IntPtr window, int resolutionWidth, int resolutionHeight)
+        public bool Initialize(IntPtr windowHandle, int resolutionWidth, int resolutionHeight)
         {
             if (isInitialized)
                 return true;
@@ -26,20 +28,20 @@ namespace Milk.Window
             ResolutionWidth = resolutionWidth;
             ResolutionHeight = resolutionHeight;
 
-            Renderer = SDL.SDL_CreateRenderer(
-                window, 
+            Handle = SDL.SDL_CreateRenderer(
+                windowHandle, 
                 -1, 
                 SDL.SDL_RendererFlags.SDL_RENDERER_ACCELERATED | SDL.SDL_RendererFlags.SDL_RENDERER_PRESENTVSYNC);
 
-            if (Renderer == IntPtr.Zero)
+            if (Handle == IntPtr.Zero)
             {
                 // Log error.
                 return false;
             }
 
             SDL.SDL_SetHint(SDL.SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
-            SDL.SDL_RenderSetLogicalSize(Renderer, ResolutionWidth, ResolutionHeight);
-            SDL.SDL_SetRenderDrawBlendMode(Renderer, SDL.SDL_BlendMode.SDL_BLENDMODE_BLEND);
+            SDL.SDL_RenderSetLogicalSize(Handle, ResolutionWidth, ResolutionHeight);
+            SDL.SDL_SetRenderDrawBlendMode(Handle, SDL.SDL_BlendMode.SDL_BLENDMODE_BLEND);
 
             isInitialized = true;
             return true;
@@ -47,19 +49,19 @@ namespace Milk.Window
 
         public void BeginDraw()
         {
-            SDL.SDL_SetRenderDrawColor(Renderer, 0x00, 0x00, 0x00, 0xFF);
-            SDL.SDL_RenderClear(Renderer);
+            SDL.SDL_SetRenderDrawColor(Handle, 0x00, 0x00, 0x00, 0xFF);
+            SDL.SDL_RenderClear(Handle);
         }
 
         public void EndDraw()
         {
-            SDL.SDL_RenderPresent(Renderer);
+            SDL.SDL_RenderPresent(Handle);
         }
 
         public void Dispose()
         {
-            SDL.SDL_DestroyRenderer(Renderer);
-            Renderer = IntPtr.Zero;
+            SDL.SDL_DestroyRenderer(Handle);
+            Handle = IntPtr.Zero;
         }
     }
 }

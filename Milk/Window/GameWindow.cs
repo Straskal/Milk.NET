@@ -3,22 +3,22 @@ using System;
 
 namespace Milk.Window
 {
-    public sealed class SDLWindow : IDisposable
+    public sealed class GameWindow : IDisposable
     {
         private bool isInitialized;
 
-        public SDLWindow()
+        public GameWindow()
         {
             isInitialized = false;
 
-            Window = IntPtr.Zero;
-            Title = "milk";
+            Handle = IntPtr.Zero;
+            Title = string.Empty;
             Width = 0;
             Height = 0;
             IsFullscreen = false;
         }
 
-        public IntPtr Window { get; private set; }
+        public IntPtr Handle { get; private set; }
         public string Title { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
@@ -39,7 +39,7 @@ namespace Milk.Window
                 return false;
             }
 
-            Window = SDL.SDL_CreateWindow(
+            Handle = SDL.SDL_CreateWindow(
                 Title, 
                 SDL.SDL_WINDOWPOS_CENTERED,
                 SDL.SDL_WINDOWPOS_CENTERED, 
@@ -47,7 +47,7 @@ namespace Milk.Window
                 Height, 
                 SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN);
 
-            if (Window == IntPtr.Zero)
+            if (Handle == IntPtr.Zero)
             {
                 // Log error.
                 return false;
@@ -65,15 +65,16 @@ namespace Milk.Window
             IsFullscreen = !IsFullscreen;
 
             if (IsFullscreen)
-                SDL.SDL_SetWindowFullscreen(Window, (uint)SDL.SDL_WindowFlags.SDL_WINDOW_FULLSCREEN_DESKTOP);
+                SDL.SDL_SetWindowFullscreen(Handle, (uint)SDL.SDL_WindowFlags.SDL_WINDOW_FULLSCREEN_DESKTOP);
             else
-                SDL.SDL_SetWindowFullscreen(Window, 0);
+                SDL.SDL_SetWindowFullscreen(Handle, 0);
         }
 
         public void Dispose()
         {
-            SDL.SDL_DestroyWindow(Window);
-            Window = IntPtr.Zero;
+            SDL.SDL_DestroyWindow(Handle);
+            Handle = IntPtr.Zero;
+
             SDL.SDL_Quit();
         }
     }

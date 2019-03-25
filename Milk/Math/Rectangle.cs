@@ -25,15 +25,19 @@ namespace Milk.Math
         public bool IsEmpty => x == 0 && y == 0 && width == 0 && height == 0;
 
         public bool Overlaps(Rectangle other)
-            => other.Left < Right
-            && Left < other.Right
-            && other.Top < Bottom
-            && Top < other.Bottom;
+        {
+            return other.Left < Right
+                && Left < other.Right
+                && other.Top < Bottom
+                && Top < other.Bottom;
+        }
 
         public bool Equals(Rectangle other)
-            => x == other.x
-            && y == other.y
-            && width == other.width
-            && height == other.height;
+        {
+            return x == other.x
+                && y == other.y
+                && width == other.width
+                && height == other.height;
+        }
     }
 }

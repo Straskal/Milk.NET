@@ -20,45 +20,73 @@ namespace Milk.Math
         public float y;
 
         public float Length()
-            => (float)System.Math.Sqrt(x * x + y * y);
+        {
+            return (float)System.Math.Sqrt(x * x + y * y);
+        }
 
         public Vector2 Normalized()
-            => this / Length();
+        {
+            return this / Length();
+        }
 
         public bool Equals(Vector2 other)
-            => this == other;        
+        {
+            return this == other;
+        }
 
         public static bool operator ==(Vector2 v1, Vector2 v2)
-            => v1.x == v2.x && v1.y == v2.y;        
+        {
+            return v1.x == v2.x && v1.y == v2.y;
+        }
 
         public static bool operator !=(Vector2 v1, Vector2 v2)
-            => v1.x != v2.x || v1.y != v2.y;        
+        {
+            return v1.x != v2.x || v1.y != v2.y;
+        }
 
         public static Vector2 operator -(Vector2 v)
-            => new Vector2(-v.x, -v.y);        
+        {
+            return new Vector2(-v.x, -v.y);
+        }
 
         public static Vector2 operator +(Vector2 v1, Vector2 v2)
-            => new Vector2(v1.x + v2.x, v1.y + v2.y);        
+        {
+            return new Vector2(v1.x + v2.x, v1.y + v2.y);
+        }
 
         public static Vector2 operator -(Vector2 v1, Vector2 v2)
-            => new Vector2(v1.x - v2.x, v1.y - v2.y);        
+        {
+            return new Vector2(v1.x - v2.x, v1.y - v2.y);
+        }
 
         public static Vector2 operator *(Vector2 v1, Vector2 v2)
-            => new Vector2(v1.x * v2.x, v1.y * v2.y);        
+        {
+            return new Vector2(v1.x * v2.x, v1.y * v2.y);
+        }
 
         public static Vector2 operator /(Vector2 v1, Vector2 v2)
-            => new Vector2(v1.x / v2.x, v1.y / v2.y);        
+        {
+            return new Vector2(v1.x / v2.x, v1.y / v2.y);
+        }
 
         public static Vector2 operator +(Vector2 v, float scalar)
-            => new Vector2(v.x + scalar, v.y + scalar);        
+        {
+            return new Vector2(v.x + scalar, v.y + scalar);
+        }
 
         public static Vector2 operator -(Vector2 v, float scalar)
-            => new Vector2(v.x - scalar, v.y - scalar);        
+        {
+            return new Vector2(v.x - scalar, v.y - scalar);
+        }
 
         public static Vector2 operator *(Vector2 v, float scalar)
-            => new Vector2(v.x * scalar, v.y * scalar);        
+        {
+            return new Vector2(v.x * scalar, v.y * scalar);
+        }
 
         public static Vector2 operator /(Vector2 v, float scalar)
-            => new Vector2(v.x / scalar, v.y / scalar);        
+        {
+            return new Vector2(v.x / scalar, v.y / scalar);
+        }        
     }
 }
