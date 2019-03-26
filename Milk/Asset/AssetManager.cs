@@ -40,11 +40,14 @@ namespace Milk.Asset
         {
             if (loadedAssets.TryGetValue(assetName, out object existingAsset))
             {
-                if (existingAsset != null && existingAsset is T existingAssetAsT)
-                    return existingAssetAsT;
+                if (existingAsset != null)
+                {
+                     if (existingAsset is T existingAssetAsT)
+                        return existingAssetAsT;
 
-                Logger.Log(LogLevel.Warning, $"Failed to load {assetName} as {typeof(T)}");
-                return null;
+                    Logger.Log(LogLevel.Warning, $"Failed to load {assetName} as {typeof(T)}");
+                    return null;
+                }
             } 
 
             if (assetLoaders.TryGetValue(typeof(T), out IAssetLoader loader))
