@@ -35,7 +35,7 @@ namespace Milk.Window
 
             SDL.SDL_SetHint(SDL.SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1");
 
-            if (SDL.SDL_Init(SDL.SDL_INIT_VIDEO) < 0)
+            if (SDL.SDL_Init(SDL.SDL_INIT_VIDEO | SDL.SDL_INIT_TIMER) < 0)
             {
                 Logger.Log(LogLevel.Error, $"Error initializing SDL: {SDL.SDL_GetError()}");
                 return false;

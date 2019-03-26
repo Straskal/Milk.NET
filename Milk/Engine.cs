@@ -52,15 +52,23 @@ namespace Milk
 
         public bool Run()
         {
-            isRunning = true;
-
             try
             {
+                isRunning = true;
+
+                const float MILLISECONDS_PER_FRAME = 1000 / 60; // = 16
+
                 while (isRunning)
                 {
+                    uint startTicks = SDL.SDL_GetTicks();
+
                     HandleEvents();
-                    Update();
+                    Update(MILLISECONDS_PER_FRAME);
                     Render();
+
+                    uint endTicks = SDL.SDL_GetTicks() - startTicks;
+                    if (endTicks < MILLISECONDS_PER_FRAME)
+                        SDL.SDL_Delay((uint)MILLISECONDS_PER_FRAME - endTicks);
                 }
             }
             catch (Exception e)
@@ -90,9 +98,8 @@ namespace Milk
             }
         }
 
-        private void Update()
+        private void Update(float deltaTime)
         {
-
         }
 
         private void Render()
