@@ -48,7 +48,7 @@ namespace Milk.Asset
                     Logger.Log(LogLevel.Warning, $"Failed to load {assetName} as {typeof(T)}");
                     return null;
                 }
-            } 
+            }
 
             if (assetLoaders.TryGetValue(typeof(T), out IAssetLoader loader))
             {
@@ -60,6 +60,9 @@ namespace Milk.Asset
                     return assetAsT;
                 }
 
+                // TODO: The initial load of an asset does not dispose of it if it wasn't loaded as the correct type.
+                //       For now, this is fine. The asset will be cleaned up eventually. But it might warrant a more
+                //       descriptive message and disposable of "failed" asset.
                 Logger.Log(LogLevel.Warning, $"Failed to load {assetName} as {typeof(T)}");
                 return null;
             }
