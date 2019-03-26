@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milk", "milk\Milk.csproj", "{B299C8D1-2218-4960-89FC-6562B58228A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MilkRunner", "MilkRunner\MilkRunner.csproj", "{7DD3289B-9138-4D4A-AA68-A092DCF666E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milk.Main", "MilkRunner\Milk.Main.csproj", "{7DD3289B-9138-4D4A-AA68-A092DCF666E1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milk.Tests", "Milk.Tests\Milk.Tests.csproj", "{F5AA77E0-856F-4768-8131-75B88B7EAEA5}"
 EndProject

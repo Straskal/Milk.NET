@@ -2,15 +2,14 @@
 using Milk.Graphics;
 using Milk.Window;
 using SDL2;
+using System;
 
 namespace Milk
 {
-    /// <summary>
-    /// As of right now. this is a bs class for testing.
-    /// </summary>
-    public sealed class Engine
+    public sealed class Engine : IDisposable
     {
         private static Engine instance;
+
         public static Engine Instance
         {
             get
@@ -51,32 +50,60 @@ namespace Milk
             return true;
         }
 
-        public void Run()
+        public bool Run()
         {
             isRunning = true;
 
-            while (isRunning)
+            try
             {
-                while (SDL.SDL_PollEvent(out var e) != 0)
+                while (isRunning)
                 {
-                    if (e.type == SDL.SDL_EventType.SDL_QUIT)
-                        isRunning = false;
-
-                    if (e.type == SDL.SDL_EventType.SDL_KEYUP)
-                    {
-                        if (e.key.keysym.sym == SDL.SDL_Keycode.SDLK_ESCAPE)
-                            isRunning = false;
-
-                        if (e.key.keysym.sym == SDL.SDL_Keycode.SDLK_f)
-                            Window.ToggleFullscreen();
-                    }
+                    HandleEvents();
+                    Update();
+                    Render();
                 }
-
-                Renderer.BeginDraw();
-                Renderer.Draw(texture, new Math.Vector2(10, 10), new Math.Rectangle(0, 0, 64, 64));
-                Renderer.EndDraw();
+            }
+            catch (Exception e)
+            {
+                Logger.Log(LogLevel.Error, e.Message);
+                return false;
             }
 
+            return true;
+        }
+
+        private void HandleEvents()
+        {
+            while (SDL.SDL_PollEvent(out var e) != 0)
+            {
+                if (e.type == SDL.SDL_EventType.SDL_QUIT)
+                    isRunning = false;
+
+                if (e.type == SDL.SDL_EventType.SDL_KEYUP)
+                {
+                    if (e.key.keysym.sym == SDL.SDL_Keycode.SDLK_ESCAPE)
+                        isRunning = false;
+
+                    if (e.key.keysym.sym == SDL.SDL_Keycode.SDLK_f)
+                        Window.ToggleFullscreen();
+                }
+            }
+        }
+
+        private void Update()
+        {
+
+        }
+
+        private void Render()
+        {
+            Renderer.BeginDraw();
+            Renderer.Draw(texture, new Math.Vector2(10, 10), new Math.Rectangle(0, 0, 64, 64));
+            Renderer.EndDraw();
+        }
+
+        public void Dispose()
+        {
             Renderer.Dispose();
             Window.Dispose();
         }
