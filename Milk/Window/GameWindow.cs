@@ -33,9 +33,11 @@ namespace Milk.Window
             Width = width;
             Height = height;
 
+            SDL.SDL_SetHint(SDL.SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1");
+
             if (SDL.SDL_Init(SDL.SDL_INIT_VIDEO) < 0)
             {
-                // Log error.
+                Logger.Log(LogLevel.Error, $"Error initializing SDL: {SDL.SDL_GetError()}");
                 return false;
             }
 
@@ -49,7 +51,7 @@ namespace Milk.Window
 
             if (Handle == IntPtr.Zero)
             {
-                // Log error.
+                Logger.Log(LogLevel.Error, $"Error creating SDL window: {SDL.SDL_GetError()}");
                 return false;
             }
 

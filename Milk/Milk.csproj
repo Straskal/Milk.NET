@@ -44,17 +44,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game.cs" />
+    <Compile Include="Asset\AssetManager.cs" />
+    <Compile Include="Asset\IAssetLoader.cs" />
+    <Compile Include="Asset\TextureLoader.cs" />
+    <Compile Include="Engine.cs" />
     <Compile Include="Graphics\Color.cs" />
     <Compile Include="Graphics\Texture.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Math\Rectangle.cs" />
     <Compile Include="Math\Vector2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Window\Renderer.cs" />
     <Compile Include="Window\GameWindow.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Asset\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,6 @@
-﻿using SDL2;
+﻿using Milk.Graphics;
+using Milk.Math;
+using SDL2;
 using System;
 
 namespace Milk.Window
@@ -35,7 +37,7 @@ namespace Milk.Window
 
             if (Handle == IntPtr.Zero)
             {
-                // Log error.
+                Logger.Log(LogLevel.Error, $"Error initializing SDL renderer: {SDL.SDL_GetError()}");
                 return false;
             }
 
@@ -51,6 +53,27 @@ namespace Milk.Window
         {
             SDL.SDL_SetRenderDrawColor(Handle, 0x00, 0x00, 0x00, 0xFF);
             SDL.SDL_RenderClear(Handle);
+        }
+
+        public void Draw(Texture texture, Vector2 position, Rectangle sourceRectangle)
+        {
+            var sourceRect = new SDL.SDL_Rect
+            {
+                x = sourceRectangle.x,
+                y = sourceRectangle.y,
+                w = sourceRectangle.width,
+                h = sourceRectangle.height
+            };
+
+            var destinationRect = new SDL.SDL_Rect
+            {
+                x = (int)position.x,
+                y = (int)position.y,
+                w = sourceRectangle.width,
+                h = sourceRectangle.height
+            };
+
+            SDL.SDL_RenderCopy(Handle, texture.Handle, ref sourceRect, ref destinationRect);
         }
 
         public void EndDraw()
