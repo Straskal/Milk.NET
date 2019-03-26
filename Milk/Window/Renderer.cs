@@ -5,7 +5,7 @@ using System;
 
 namespace Milk.Window
 {
-    public sealed class Renderer : IDisposable
+    public sealed class Renderer : IRenderer, IDisposable
     {
         private bool isInitialized;
 
@@ -49,13 +49,13 @@ namespace Milk.Window
             return true;
         }
 
-        public void BeginDraw()
+        public void BeginRender()
         {
             SDL.SDL_SetRenderDrawColor(Handle, 0x00, 0x00, 0x00, 0xFF);
             SDL.SDL_RenderClear(Handle);
         }
 
-        public void Draw(Texture texture, Vector2 position, Rectangle sourceRectangle)
+        public void Render(Texture texture, Vector2 position, Rectangle sourceRectangle)
         {
             var sourceRect = new SDL.SDL_Rect
             {
@@ -76,7 +76,7 @@ namespace Milk.Window
             SDL.SDL_RenderCopy(Handle, texture.Handle, ref sourceRect, ref destinationRect);
         }
 
-        public void EndDraw()
+        public void EndRender()
         {
             SDL.SDL_RenderPresent(Handle);
         }

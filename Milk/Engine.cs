@@ -104,9 +104,9 @@ namespace Milk
 
         private void Render()
         {
-            Renderer.BeginDraw();
-            Renderer.Draw(texture, new Math.Vector2(10, 10), new Math.Rectangle(0, 0, 64, 64));
-            Renderer.EndDraw();
+            Renderer.BeginRender();
+            Renderer.Render(texture, new Math.Vector2(10, 10), new Math.Rectangle(0, 0, 64, 64));
+            Renderer.EndRender();
         }
 
         public void Dispose()

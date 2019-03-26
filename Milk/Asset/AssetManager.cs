@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Milk.Asset
 {
-    public class AssetManager : IDisposable
+    public class AssetManager : IAssetManager, IDisposable
     {
         private readonly Dictionary<Type, IAssetLoader> assetLoaders;
         private readonly Dictionary<string, object> loadedAssets;

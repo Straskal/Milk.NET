@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Asset\AssetManager.cs" />
     <Compile Include="Asset\IAssetLoader.cs" />
+    <Compile Include="Asset\IAssetManager.cs" />
     <Compile Include="Asset\TextureLoader.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Graphics\Color.cs" />
@@ -54,6 +55,16 @@
     <Compile Include="Math\Rectangle.cs" />
     <Compile Include="Math\Vector2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scene\Actor.cs" />
+    <Compile Include="Scene\Callbacks\IDestroyable.cs" />
+    <Compile Include="Scene\Callbacks\IAwakable.cs" />
+    <Compile Include="Scene\Callbacks\ILoadable.cs" />
+    <Compile Include="Scene\Callbacks\IRenderable.cs" />
+    <Compile Include="Scene\Callbacks\IUpdatable.cs" />
+    <Compile Include="Scene\IComponent.cs" />
+    <Compile Include="Scene\ComponentList.cs" />
+    <Compile Include="Scene\IScene.cs" />
+    <Compile Include="Window\IRenderer.cs" />
     <Compile Include="Window\Renderer.cs" />
     <Compile Include="Window\GameWindow.cs" />
   </ItemGroup>
