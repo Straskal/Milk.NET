@@ -1,18 +1,10 @@
-﻿using System;
-using Milk.Graphics;
+﻿using Milk;
 
-namespace Milk
+namespace GameRunner
 {
-    public class Program
+    class Program
     {
-        // Triangle vertices
-        private static float[] vertices = {
-            -0.5f, -0.5f,
-            0.5f, -0.5f,
-            0.0f,  0.5f,
-        };
-
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
             bool isRunning = true;
 

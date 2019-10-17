@@ -64,7 +64,7 @@ namespace Milk.Graphics
 
         internal delegate void glGenBuffers(int n, ref uint buffers);
         internal delegate void glBindBuffer(uint target, uint buffer);
-        internal delegate void glBufferData(uint target, IntPtr size, float[] data, uint usage);
+        internal delegate void glBufferData(uint target, IntPtr size, IntPtr data, uint usage);
         internal delegate void glEnableVertexAttribArray(uint index);
         internal delegate void glVertexAttribPointer(uint indx, int size, uint type, bool normalized, int stride, IntPtr ptr);
         internal delegate void glGenVertexArrays(int n, ref uint arrays);
