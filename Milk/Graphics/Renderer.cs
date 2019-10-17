@@ -9,8 +9,7 @@ namespace Milk.Graphics
         private readonly uint _vertexArrayObject;
         private readonly uint _vertexBufferObject;
 
-        private string _vertexShaderCode;
-        private string _fragmentShaderCode;
+        private ShaderProgram _defaultShaderProgram;
 
         private float[] _vertices = {
             -0.5f, -0.5f,
@@ -30,7 +29,10 @@ namespace Milk.Graphics
             GL.BindBuffer(GL.ARRAY_BUFFER, 0);
             GL.BindVertexArray(0);
 
-            LoadShaders();
+            _defaultShaderProgram = LoadEmbeddedShader(
+                "Milk.Graphics.Shaders.DefaultVertexShader.glsl",
+                "Milk.Graphics.Shaders.DefaultFragmentShader.glsl"
+                );
         }
 
         public void Clear(float red, float green, float blue, float alpha)
@@ -41,21 +43,26 @@ namespace Milk.Graphics
 
         public void DrawTriangle()
         {
+            _defaultShaderProgram.Use();
             GL.BindVertexArray(_vertexArrayObject);
             GL.DrawArrays(GL.TRIANGLES, 0, 3);
         }
 
-        private void LoadShaders()
+        private ShaderProgram LoadEmbeddedShader(string vertexResourcePath, string fragmentResourcePath)
         {
+            string vertexShaderCode = string.Empty;
+            string fragmentShaderCode = string.Empty;
             Assembly assembly = typeof(GL).Assembly;
 
-            using (Stream shaderStream = assembly.GetManifestResourceStream("Milk.Graphics.Shaders.DefaultVertexShader.glsl"))
+            using (Stream shaderStream = assembly.GetManifestResourceStream(vertexResourcePath))
             using (StreamReader streamReader = new StreamReader(shaderStream))
-                _vertexShaderCode = streamReader.ReadToEnd();
+                vertexShaderCode = streamReader.ReadToEnd();
 
-            using (Stream shaderStream = assembly.GetManifestResourceStream("Milk.Graphics.Shaders.DefaultFragmentShader.glsl"))
+            using (Stream shaderStream = assembly.GetManifestResourceStream(fragmentResourcePath))
             using (StreamReader streamReader = new StreamReader(shaderStream))
-                _fragmentShaderCode = streamReader.ReadToEnd();
+                fragmentShaderCode = streamReader.ReadToEnd();
+
+            return new ShaderProgram(vertexShaderCode, fragmentShaderCode);
         }
     }
 }
