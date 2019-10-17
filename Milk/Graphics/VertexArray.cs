@@ -4,7 +4,7 @@ namespace Milk.Graphics
 {
     public class VertexArray
     {
-        private readonly float[] _vertices;
+        private readonly Vertex[] _vertices;
         private readonly uint _id;
         private readonly uint _bufferId;
 
@@ -12,7 +12,7 @@ namespace Milk.Graphics
 
         public VertexArray()
         {
-            _vertices = new float[512];
+            _vertices = new Vertex[512];
 
             GL.GenVertexArrays(1, ref _id);
             GL.BindVertexArray(_id);
@@ -26,17 +26,16 @@ namespace Milk.Graphics
 
         public void AddVertex(Vertex vertex)
         {
-            _vertices[_vertexIndex++] = vertex.X;
-            _vertices[_vertexIndex++] = vertex.Y;
+            _vertices[_vertexIndex++] = vertex;
         }
 
         public unsafe void Draw()
         {
             GL.BindBuffer(GL.ARRAY_BUFFER, _bufferId);
-            fixed (float* temp = &_vertices[0])
+            fixed (Vertex* temp = &_vertices[0])
                 GL.BufferData(
                     GL.ARRAY_BUFFER,
-                    new IntPtr(sizeof(float) * _vertices.Length),
+                    new IntPtr(sizeof(Vertex) * _vertices.Length),
                     new IntPtr((void*)temp),
                     GL.STATIC_DRAW
                 );
