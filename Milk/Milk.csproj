@@ -12,12 +12,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Shaders/DefaultVertexShader.glsl" />
-    <Content Remove="Shaders/DefaultFragmentShader.glsl" />
+    <Content Remove="Graphics/Shaders/DefaultVertexShader.glsl" />
+    <Content Remove="Graphics/Shaders/DefaultFragmentShader.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Shaders/DefaultVertexShader.glsl" />
-    <EmbeddedResource Include="Shaders/DefaultFragmentShader.glsl" />
+    <EmbeddedResource Include="Graphics/Shaders/DefaultVertexShader.glsl" />
+    <EmbeddedResource Include="Graphics/Shaders/DefaultFragmentShader.glsl" />
   </ItemGroup>
 
 </Project>

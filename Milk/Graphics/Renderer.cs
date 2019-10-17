@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
+using System.Reflection;
 
 namespace Milk.Graphics
 {
@@ -8,6 +8,9 @@ namespace Milk.Graphics
     {
         private readonly uint _vertexArrayObject;
         private readonly uint _vertexBufferObject;
+
+        private string _vertexShaderCode;
+        private string _fragmentShaderCode;
 
         private float[] _vertices = {
             -0.5f, -0.5f,
@@ -26,6 +29,8 @@ namespace Milk.Graphics
             GL.VertexAttribPointer(0, 2, GL.FLOAT, false, 0, IntPtr.Zero);
             GL.BindBuffer(GL.ARRAY_BUFFER, 0);
             GL.BindVertexArray(0);
+
+            LoadShaders();
         }
 
         public void Clear(float red, float green, float blue, float alpha)
@@ -38,6 +43,19 @@ namespace Milk.Graphics
         {
             GL.BindVertexArray(_vertexArrayObject);
             GL.DrawArrays(GL.TRIANGLES, 0, 3);
+        }
+
+        private void LoadShaders()
+        {
+            Assembly assembly = typeof(GL).Assembly;
+
+            using (Stream shaderStream = assembly.GetManifestResourceStream("Milk.Graphics.Shaders.DefaultVertexShader.glsl"))
+            using (StreamReader streamReader = new StreamReader(shaderStream))
+                _vertexShaderCode = streamReader.ReadToEnd();
+
+            using (Stream shaderStream = assembly.GetManifestResourceStream("Milk.Graphics.Shaders.DefaultFragmentShader.glsl"))
+            using (StreamReader streamReader = new StreamReader(shaderStream))
+                _fragmentShaderCode = streamReader.ReadToEnd();
         }
     }
 }
