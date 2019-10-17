@@ -43,6 +43,7 @@ namespace Milk.Graphics
                 );
 
             GL.DrawArrays(GL.TRIANGLES, 0, 3);
+            GL.BindVertexArray(0);
         }
     }
 }
