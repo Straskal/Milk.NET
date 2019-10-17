@@ -32,8 +32,7 @@ namespace Milk.Graphics
 
         public unsafe void Draw()
         {
-            GL.BindVertexArray(_id);
-
+            GL.BindBuffer(GL.ARRAY_BUFFER, _bufferId);
             fixed (float* temp = &_vertices[0])
                 GL.BufferData(
                     GL.ARRAY_BUFFER,
@@ -41,7 +40,9 @@ namespace Milk.Graphics
                     new IntPtr((void*)temp),
                     GL.STATIC_DRAW
                 );
+            GL.BindBuffer(GL.ARRAY_BUFFER, 0);
 
+            GL.BindVertexArray(_id);
             GL.DrawArrays(GL.TRIANGLES, 0, 3);
             GL.BindVertexArray(0);
         }
