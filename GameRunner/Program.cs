@@ -1,10 +1,11 @@
 ﻿using Milk;
+using Milk.Graphics;
 
 namespace GameRunner
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             bool isRunning = true;
 
@@ -20,13 +21,18 @@ namespace GameRunner
 
             using (var window = new Window(windowParams))
             {
+                var buffer = new VertexArray();
+                buffer.AddVertex(new Vertex(-0.5f, -0.5f));
+                buffer.AddVertex(new Vertex(0.5f, -0.5f));
+                buffer.AddVertex(new Vertex(0.0f, 0.5f));
+
                 window.OnCloseRequested += () => isRunning = false;
                 Keyboard.OnKeyPressed += (Keys key) => { if (key == Keys.Escape) isRunning = false; };
 
                 do
                 {
                     window.Renderer.Clear(0, 0, 0, 0);
-                    window.Renderer.DrawTriangle();
+                    window.Renderer.DrawBuffer(buffer);
                     window.SwapBuffers();
                     window.PollEvents();
                 } while (isRunning);
