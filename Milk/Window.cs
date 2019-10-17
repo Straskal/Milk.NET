@@ -1,4 +1,5 @@
-﻿using Milk.Platform;
+﻿using Milk.Graphics;
+using Milk.Platform;
 using System;
 using System.Runtime.InteropServices;
 
@@ -6,7 +7,7 @@ namespace Milk
 {
     public class Window : IDisposable
     {
-        private GLFW.windowclosefun _onWindowClosed;
+        private readonly GLFW.windowclosefun _onWindowClosed;
 
         public Window(WindowParameters parameters)
         {
@@ -25,16 +26,20 @@ namespace Milk
             if (Handle == IntPtr.Zero)
                 throw new InvalidOperationException("Could not create Glfw window!");
 
-            GLFW.MakeContextCurrent(Handle);
-
             _onWindowClosed = (IntPtr window) => OnCloseRequested?.Invoke();
-
             GLFW.SetWindowCloseCallback(Handle, Marshal.GetFunctionPointerForDelegate(_onWindowClosed));
 
-            GL.Init();
+            Keyboard.Init(Handle);
+
+            GLFW.MakeContextCurrent(Handle);
+            GL.Init(GLFW.GetProcAddress);
+
+            Renderer = new Renderer();
         }
 
         internal IntPtr Handle { get; private set; }
+
+        public Renderer Renderer { get; private set; }
 
         #region Events
         public delegate void WindowClosedHandler();

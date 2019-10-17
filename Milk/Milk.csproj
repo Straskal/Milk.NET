@@ -3,10 +3,21 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="bin\Debug\netcoreapp2.1\glfw.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Shaders/DefaultVertexShader.glsl" />
+    <Content Remove="Shaders/DefaultFragmentShader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Shaders/DefaultVertexShader.glsl" />
+    <EmbeddedResource Include="Shaders/DefaultFragmentShader.glsl" />
   </ItemGroup>
 
 </Project>

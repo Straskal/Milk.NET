@@ -1,31 +1,40 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Milk.Platform
+namespace Milk.Graphics
 {
     internal static class GL
     {
         private const string OPENGL_DLL = "opengl32.dll";
 
         #region Constants
-        internal const int ARRAY_BUFFER     = 0x8892;
-        internal const int STATIC_DRAW      = 0x88E4;
-        internal const int FLOAT            = 0x1406;
-        internal const int TRIANGLES        = 0x0004;
+        internal const int ARRAY_BUFFER = 0x8892;
+        internal const int STATIC_DRAW = 0x88E4;
+        internal const int FLOAT = 0x1406;
+        internal const int TRIANGLES = 0x0004;
         internal const int COLOR_BUFFER_BIT = 0x4000;
         #endregion
 
-        internal static void Init()
+        internal static void Init(Func<string, IntPtr> getProcAddress)
         {
-            GenBuffers = GetOpenGlFunctionPointer<glGenBuffers>();
-            BindBuffer = GetOpenGlFunctionPointer<glBindBuffer>();
-            BufferData = GetOpenGlFunctionPointer<glBufferData>();
-            EnableVertexAttribArray = GetOpenGlFunctionPointer<glEnableVertexAttribArray>();
-            VertexAttribPointer = GetOpenGlFunctionPointer<glVertexAttribPointer>();
-            GenVertexArrays = GetOpenGlFunctionPointer<glGenVertexArrays>();
-            BindVertexArray = GetOpenGlFunctionPointer<glBindVertexArray>();
-            ClearColor = GetOpenGlFunctionPointer<glClearColor>();
-            Clear = GetOpenGlFunctionPointer<glClear>();
+            T LoadOpenGLFunction<T>()
+            {
+                IntPtr functionPtr = getProcAddress(typeof(T).Name);
+
+                return functionPtr != IntPtr.Zero
+                    ? Marshal.GetDelegateForFunctionPointer<T>(functionPtr)
+                    : throw new InvalidOperationException($"Unable to load Function Pointer: {typeof(T).Name}");
+            }
+
+            GenBuffers = LoadOpenGLFunction<glGenBuffers>();
+            BindBuffer = LoadOpenGLFunction<glBindBuffer>();
+            BufferData = LoadOpenGLFunction<glBufferData>();
+            EnableVertexAttribArray = LoadOpenGLFunction<glEnableVertexAttribArray>();
+            VertexAttribPointer = LoadOpenGLFunction<glVertexAttribPointer>();
+            GenVertexArrays = LoadOpenGLFunction<glGenVertexArrays>();
+            BindVertexArray = LoadOpenGLFunction<glBindVertexArray>();
+            ClearColor = LoadOpenGLFunction<glClearColor>();
+            Clear = LoadOpenGLFunction<glClear>();
         }
 
         [DllImport(OPENGL_DLL, EntryPoint = "glDrawArrays")]
@@ -52,14 +61,5 @@ namespace Milk.Platform
         internal static glBindVertexArray BindVertexArray { get; private set; }
         internal static glClearColor ClearColor { get; private set; }
         internal static glClear Clear { get; private set; }
-        
-        private static T GetOpenGlFunctionPointer<T>()
-        {
-            IntPtr funcPtr = GLFW.GetProcAddress(typeof(T).Name);
-
-            return funcPtr != IntPtr.Zero 
-                ? Marshal.GetDelegateForFunctionPointer<T>(funcPtr) 
-                : throw new InvalidOperationException($"Unable to load Function Pointer: {typeof(T).Name}");
-        }
     }
 }
