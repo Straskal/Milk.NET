@@ -1,18 +1,19 @@
 ﻿using Milk.Platform;
 using System;
+using System.Runtime.InteropServices;
 
 namespace Milk
 {
-    public class Window
+    public class Window : IDisposable
     {
-        internal IntPtr Handle { get; private set; }
+        private GLFW.windowclosefun _onWindowClosed;
 
-        public void Initialize(WindowParameters parameters)
+        public Window(WindowParameters parameters)
         {
             GLFW.Init();
             GLFW.WindowHint(GLFW.CONTEXT_VERSION_MAJOR, 4);
             GLFW.WindowHint(GLFW.CONTEXT_VERSION_MINOR, 5);
-            GLFW.WindowHint(GLFW.OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
+            GLFW.WindowHint(GLFW.OPENGL_PROFILE, GLFW.OPENGL_CORE_PROFILE);
             GLFW.WindowHint(GLFW.FOCUSED, GLFW.TRUE);
             GLFW.WindowHint(GLFW.FOCUS_ON_SHOW, GLFW.TRUE);
             GLFW.WindowHint(GLFW.DECORATED, parameters.IsBordered ? GLFW.TRUE : GLFW.FALSE);
@@ -25,9 +26,20 @@ namespace Milk
                 throw new InvalidOperationException("Could not create Glfw window!");
 
             GLFW.MakeContextCurrent(Handle);
+
+            _onWindowClosed = (IntPtr window) => OnCloseRequested?.Invoke();
+
+            GLFW.SetWindowCloseCallback(Handle, Marshal.GetFunctionPointerForDelegate(_onWindowClosed));
+
+            GL.Init();
         }
 
-        public bool ShouldClose => GLFW.WindowShouldClose(Handle) == 1;
+        internal IntPtr Handle { get; private set; }
+
+        #region Events
+        public delegate void WindowClosedHandler();
+        public event WindowClosedHandler OnCloseRequested;
+        #endregion
 
         public void PollEvents()
         {
@@ -39,7 +51,7 @@ namespace Milk
             GLFW.SwapBuffers(Handle);
         }
 
-        public void Close()
+        public void Dispose()
         {
             GLFW.Terminate();
         }

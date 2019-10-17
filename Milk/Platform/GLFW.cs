@@ -21,37 +21,41 @@ namespace Milk.Platform
         internal const int TRUE = 1;
         internal const int FALSE = 0;
 
-        internal const int GLFW_OPENGL_CORE_PROFILE = 0x00032001;
+        internal const int OPENGL_CORE_PROFILE = 0x00032001;
         #endregion
 
         [DllImport(GLFW_DLL, EntryPoint = "glfwInit", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool Init();
+        internal static extern bool Init();
 
         [DllImport(GLFW_DLL, EntryPoint = "glfwWindowHint", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool WindowHint(int hint, int value);
+        internal static extern bool WindowHint(int hint, int value);
 
         [DllImport(GLFW_DLL, EntryPoint = "glfwGetPrimaryMonitor", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr GetPrimaryMonitor();
+        internal static extern IntPtr GetPrimaryMonitor();
 
         [DllImport(GLFW_DLL, EntryPoint = "glfwTerminate", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool Terminate();
+        internal static extern bool Terminate();
 
         [DllImport(GLFW_DLL, EntryPoint = "glfwCreateWindow", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr CreateWindow(int width, int height, string title, IntPtr monitor, IntPtr share);
+        internal static extern IntPtr CreateWindow(int width, int height, string title, IntPtr monitor, IntPtr share);
 
         [DllImport(GLFW_DLL, EntryPoint = "glfwMakeContextCurrent", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void MakeContextCurrent(IntPtr window);
+        internal static extern void MakeContextCurrent(IntPtr window);
 
         [DllImport(GLFW_DLL, EntryPoint = "glfwSwapBuffers", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SwapBuffers(IntPtr window);
+        internal static extern void SwapBuffers(IntPtr window);
 
         [DllImport(GLFW_DLL, EntryPoint = "glfwGetProcAddress", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr GetProcAddress(string procname);
+        internal static extern IntPtr GetProcAddress(string procname);
 
         [DllImport(GLFW_DLL, EntryPoint = "glfwPollEvents", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void PollEvents();
+        internal static extern void PollEvents();
 
-        [DllImport(GLFW_DLL, EntryPoint = "glfwWindowShouldClose", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int WindowShouldClose(IntPtr window);
+        #region Window Events
+        internal delegate void windowclosefun(IntPtr window);
+
+        [DllImport(GLFW_DLL, EntryPoint = "glfwSetWindowCloseCallback", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int SetWindowCloseCallback(IntPtr window, IntPtr callback);
+        #endregion
     }
 }
