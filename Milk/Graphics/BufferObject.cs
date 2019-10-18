@@ -61,7 +61,7 @@ namespace Milk.Graphics
             }
 
             GL.BindVertexArray(_id);
-            GL.DrawArrays(GL.TRIANGLES, 0, 3);
+            GL.DrawArrays(GL.TRIANGLES, 0, _length);
             GL.BindVertexArray(0);
         }
     }

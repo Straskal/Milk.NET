@@ -22,9 +22,12 @@ namespace GameRunner
             using (var window = new Window(windowParams))
             {
                 var buffer = window.Renderer.CreateBufferObject(
-                    new Vertex(-0.5f, -0.5f),
+                    new Vertex(0.5f, 0.5f),
                     new Vertex(0.5f, -0.5f),
-                    new Vertex(0.0f, 0.5f)
+                    new Vertex(-0.5f, 0.5f),
+                    new Vertex(0.5f, -0.5f),
+                    new Vertex(-0.5f, -0.5f),
+                    new Vertex(-0.5f, 0.5f)
                 );
 
                 window.OnCloseRequested += () => isRunning = false;
