@@ -11,6 +11,12 @@ namespace Milk.Graphics
 
     public class BufferObject : IDisposable
     {
+        public static BufferObjectAttribute[] DefaultAttributes => new BufferObjectAttribute[] 
+        {
+            new BufferObjectAttribute(2),
+            new BufferObjectAttribute(4)
+        };
+
         private readonly Vertex[] _vertices;
 
         private uint _id;
@@ -45,7 +51,7 @@ namespace Milk.Graphics
                     new IntPtr((void*)(offset * sizeof(float)))
                 );
                 GL.EnableVertexAttribArray(i);
-                offset += attributes[i].NumComponents + 1;
+                offset += attributes[i].NumComponents;
             }
 
             GL.BindBuffer(GL.ARRAY_BUFFER, 0);

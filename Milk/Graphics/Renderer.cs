@@ -11,6 +11,9 @@ namespace Milk.Graphics
     {
         internal Renderer()
         {
+            GL.Enable(GL.BLENDING);
+            GL.BlendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
+
             DefaultShaderProgram = LoadEmbeddedShader(
                 ShaderSources.DefaultVertex,
                 ShaderSources.DefaultFragment

@@ -23,35 +23,31 @@ namespace GameRunner
             using (var window = new Window(windowParams))
             {
                 var buffer = window.Renderer.CreateBufferObject(
-                    new BufferObjectAttribute[] 
-                    {
-                        new BufferObjectAttribute(2),
-                        new BufferObjectAttribute(4)
-                    },
+                    BufferObject.DefaultAttributes,
                     new Vertex[]
                     {
                         new Vertex(0.5f, 0.5f),
-                        new Vertex(1f, 0f),
                         new Vertex(0f, 1f),
+                        new Vertex(0f, 0.2f),
 
                         new Vertex(0.5f, -0.5f),
-                        new Vertex(1f, 0f),
+                        new Vertex(0f, 1f),
                         new Vertex(0f, 1f),
 
                         new Vertex(-0.5f, 0.5f),
-                        new Vertex(1f, 0f),
+                        new Vertex(0f, 1f),
                         new Vertex(0f, 1f),
 
                         new Vertex(0.5f, -0.5f),
-                        new Vertex(1f, 0f),
+                        new Vertex(0f, 1f),
                         new Vertex(0f, 1f),
 
                         new Vertex(-0.5f, -0.5f),
-                        new Vertex(1f, 0f),
+                        new Vertex(0f, 1f),
                         new Vertex(0f, 1f),
 
                         new Vertex(-0.5f, 0.5f),
-                        new Vertex(1f, 0f),
+                        new Vertex(0f, 1f),
                         new Vertex(0f, 1f),
                     }
                 );
