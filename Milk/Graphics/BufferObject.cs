@@ -9,12 +9,12 @@ namespace Milk.Graphics
         Triangles = 4,
     }
 
-    public class BufferObject
+    public class BufferObject : IDisposable
     {
         private readonly Vertex[] _vertices;
-        private readonly uint _id;
-        private readonly uint _bufferId;
 
+        private uint _id;
+        private uint _bufferId;
         private int _length;
         private bool _isDirty;
 
@@ -59,6 +59,12 @@ namespace Milk.Graphics
         {
             _length = 0;
             _isDirty = true;
+        }
+
+        public void Dispose()
+        {
+            GL.DeleteBuffers(1, ref _bufferId);
+            GL.DeleteVertexArrays(1, ref _id);
         }
 
         internal unsafe void Draw(BufferDrawMode mode)

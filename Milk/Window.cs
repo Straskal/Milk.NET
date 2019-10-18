@@ -59,6 +59,7 @@ namespace Milk
 
         public void Dispose()
         {
+            Renderer.Dispose();
             GLFW.Terminate();
         }
     }

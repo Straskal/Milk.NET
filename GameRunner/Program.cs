@@ -48,6 +48,8 @@ namespace GameRunner
                     window.SwapBuffers();
                     window.PollEvents();
                 } while (isRunning);
+
+                buffer.Dispose();
             }
         }
     }

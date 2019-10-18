@@ -1,10 +1,11 @@
 ﻿using Milk.OpenGL;
+using System;
 using System.IO;
 using System.Reflection;
 
 namespace Milk.Graphics
 {
-    public class Renderer
+    public class Renderer : IDisposable
     {
         private readonly ShaderProgram _defaultShaderProgram;
 
@@ -53,6 +54,11 @@ namespace Milk.Graphics
                 fragmentShaderCode = streamReader.ReadToEnd();
 
             return new ShaderProgram(vertexShaderCode, fragmentShaderCode);
+        }
+
+        public void Dispose()
+        {
+            _defaultShaderProgram.Dispose();
         }
     }
 }

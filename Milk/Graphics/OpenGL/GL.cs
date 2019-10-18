@@ -34,6 +34,8 @@ namespace Milk.OpenGL
             GenBuffers = LoadOpenGLFunction<glGenBuffers>();
             BindBuffer = LoadOpenGLFunction<glBindBuffer>();
             BufferData = LoadOpenGLFunction<glBufferData>();
+            DeleteVertexArrays = LoadOpenGLFunction<glDeleteVertexArrays>();
+            DeleteBuffers = LoadOpenGLFunction<glDeleteBuffers>();
             EnableVertexAttribArray = LoadOpenGLFunction<glEnableVertexAttribArray>();
             VertexAttribPointer = LoadOpenGLFunction<glVertexAttribPointer>();
             GenVertexArrays = LoadOpenGLFunction<glGenVertexArrays>();
@@ -65,6 +67,8 @@ namespace Milk.OpenGL
         internal delegate void glGenBuffers(int n, ref uint buffers);
         internal delegate void glBindBuffer(uint target, uint buffer);
         internal delegate void glBufferData(uint target, IntPtr size, IntPtr data, uint usage);
+        internal delegate void glDeleteVertexArrays(uint n, ref uint buffers);
+        internal delegate void glDeleteBuffers(int n, ref uint buffers);
         internal delegate void glEnableVertexAttribArray(uint index);
         internal delegate void glVertexAttribPointer(uint indx, int size, uint type, bool normalized, int stride, IntPtr ptr);
         internal delegate void glGenVertexArrays(int n, ref uint arrays);
@@ -88,6 +92,8 @@ namespace Milk.OpenGL
         internal static glGenBuffers GenBuffers { get; private set; }
         internal static glBindBuffer BindBuffer { get; private set; }
         internal static glBufferData BufferData { get; private set; }
+        internal static glDeleteVertexArrays DeleteVertexArrays { get; private set; }
+        internal static glDeleteBuffers DeleteBuffers { get; private set; }
         internal static glEnableVertexAttribArray EnableVertexAttribArray { get; private set; }
         internal static glVertexAttribPointer VertexAttribPointer { get; private set; }
         internal static glGenVertexArrays GenVertexArrays { get; private set; }
