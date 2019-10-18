@@ -1,5 +1,6 @@
 ﻿using Milk;
 using Milk.Graphics;
+using System;
 
 namespace GameRunner
 {
@@ -22,7 +23,7 @@ namespace GameRunner
             using (var window = new Window(windowParams))
             {
                 var buffer = window.Renderer.CreateBufferObject(
-                    new BufferObjectAttribute[] 
+                    new BufferObjectAttribute[]
                     {
                         new BufferObjectAttribute(0, 2)
                     },

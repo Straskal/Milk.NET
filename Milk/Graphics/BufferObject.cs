@@ -1,4 +1,4 @@
-﻿using Milk.OpenGL;
+﻿using Milk.Graphics.OpenGL;
 using System;
 
 namespace Milk.Graphics
@@ -6,6 +6,8 @@ namespace Milk.Graphics
     public enum BufferDrawMode
     {
         Points = 0,
+        Lines = 1,
+        LineLoop = 2,
         Triangles = 4,
     }
 

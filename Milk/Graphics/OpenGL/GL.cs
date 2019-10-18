@@ -2,13 +2,14 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Milk.OpenGL
+namespace Milk.Graphics.OpenGL
 {
     internal static class GL
     {
         private const string OPENGL_DLL = "opengl32.dll";
 
         #region Constants
+
         internal const int ARRAY_BUFFER = 0x8892;
         internal const int STATIC_DRAW = 0x88E4;
         internal const int FLOAT = 0x1406;
@@ -18,6 +19,7 @@ namespace Milk.OpenGL
         internal const uint FRAGMENT_SHADER = 35632;
         internal const uint COMPILE_STATUS = 35713;
         internal const uint LINK_STATUS = 35714;
+
         #endregion
 
         internal static void Init(Func<string, IntPtr> getProcAddress)
@@ -88,6 +90,9 @@ namespace Milk.OpenGL
         internal delegate void glDeleteShader(uint shader);
         internal delegate void glUseProgram(uint program);
         internal delegate void glDeleteProgram(uint program);
+        internal delegate void glGenTextures(int n, ref uint texture);
+        internal delegate void glBindTexture(uint target, uint texture);
+        internal delegate void glTexImage2D(uint target, int level, int internalFormat, int width, int height, int border, uint format, uint type, IntPtr data);
 
         internal static glGenBuffers GenBuffers { get; private set; }
         internal static glBindBuffer BindBuffer { get; private set; }
