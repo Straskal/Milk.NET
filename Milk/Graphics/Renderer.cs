@@ -9,8 +9,6 @@ namespace Milk.Graphics
 {
     public class Renderer : IDisposable
     {
-        public ShaderProgram DefaultShaderProgram { get; }
-
         unsafe internal Renderer()
         {
             DefaultShaderProgram = LoadEmbeddedShader(
@@ -18,6 +16,8 @@ namespace Milk.Graphics
                 ShaderSources.DefaultFragment
             );
         }
+
+        public ShaderProgram DefaultShaderProgram { get; }
 
         public BufferObject CreateBufferObject(BufferObjectAttribute[] attributes, Vertex[] vertices)
         {
