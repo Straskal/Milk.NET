@@ -1,4 +1,4 @@
-﻿using Milk.OpenGL;
+﻿using Milk.Graphics.OpenGL;
 using System;
 using System.IO;
 using System.Reflection;

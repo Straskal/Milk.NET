@@ -1,5 +1,5 @@
 ﻿using Milk.Graphics;
-using Milk.OpenGL;
+using Milk.Graphics.OpenGL;
 using Milk.Platform;
 using System;
 using System.Runtime.InteropServices;

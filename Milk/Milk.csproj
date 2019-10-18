@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="bin\Debug\netcoreapp2.1\glfw.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Remove="Graphics/Shaders/DefaultVertexShader.glsl" />
     <Content Remove="Graphics/Shaders/DefaultFragmentShader.glsl" />
   </ItemGroup>
@@ -18,4 +14,8 @@
     <EmbeddedResource Include="Graphics/Shaders/DefaultFragmentShader.glsl" />
   </ItemGroup>
 
+  <Target Name="CopyThirdParty" AfterTargets="AfterBuild">
+    <Copy SourceFiles="$(SolutionDir)Milk\ThirdParty\Windows\glfw.dll" DestinationFolder="$(OutDir)" />
+  </Target>
+  
 </Project>

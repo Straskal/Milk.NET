@@ -2,13 +2,19 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Milk.OpenGL
+/*
+    Milk already depends on OpenGL, so I don't want to also depend on a third party interop library, so we have our own.
+
+    https://docs.factorcode.org/content/article-handbook.html is a great resource for constants/enum value lookups.
+*/
+namespace Milk.Graphics.OpenGL
 {
     internal static class GL
     {
         private const string OPENGL_DLL = "opengl32.dll";
 
         #region Constants
+
         internal const int ARRAY_BUFFER = 0x8892;
         internal const int STATIC_DRAW = 0x88E4;
         internal const int FLOAT = 0x1406;
@@ -18,10 +24,15 @@ namespace Milk.OpenGL
         internal const uint FRAGMENT_SHADER = 35632;
         internal const uint COMPILE_STATUS = 35713;
         internal const uint LINK_STATUS = 35714;
+
         #endregion
 
         internal static void Init(Func<string, IntPtr> getProcAddress)
         {
+            /*
+                Not all OpenGL functions are exposed in the DLL. 
+                Some are function pointers that are retrieved via getProcAddress. 
+            */
             T LoadOpenGLFunction<T>()
             {
                 IntPtr functionPtr = getProcAddress(typeof(T).Name);
@@ -60,8 +71,6 @@ namespace Milk.OpenGL
         [DllImport(OPENGL_DLL, EntryPoint = "glDrawArrays")]
         internal static extern void DrawArrays(int mode, int first, int count);
 
-        // Not all OpenGL functions are exposed in the DLL. 
-        // Some are function pointers that are retrieved via GetProcAddress.
         #region Function pointers
 
         internal delegate void glGenBuffers(int n, ref uint buffers);
