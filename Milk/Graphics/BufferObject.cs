@@ -18,15 +18,10 @@ namespace Milk.Graphics
         private int _length;
         private bool _isDirty;
 
-        internal BufferObject(BufferObjectAttribute[] attributes, int numVertices) 
-            : this(attributes, new Vertex[numVertices])
-        {            
-        }
-        
-        internal BufferObject(BufferObjectAttribute[] attributes, Vertex[] vertices)
+        internal BufferObject(int numVertices, BufferObjectAttribute[] attributes) 
         {
-            _vertices = vertices;
-            _length = vertices.Length;
+            _vertices = new Vertex[numVertices];
+            _length = 0;
             _isDirty = true;
 
             GL.GenVertexArrays(1, ref _id);
@@ -37,7 +32,14 @@ namespace Milk.Graphics
             for (uint i = 0; i < attributes.Length; i++)
             {
                 GL.EnableVertexAttribArray(i);
-                GL.VertexAttribPointer(attributes[i].Offset, attributes[i].NumComponents, GL.FLOAT, false, 0, IntPtr.Zero);
+                GL.VertexAttribPointer(
+                    attributes[i].Offset, 
+                    attributes[i].NumComponents, 
+                    GL.FLOAT, 
+                    false, 
+                    0, 
+                    IntPtr.Zero
+                );
             }
 
             GL.BindBuffer(GL.ARRAY_BUFFER, 0);
@@ -72,8 +74,14 @@ namespace Milk.Graphics
             if (_isDirty)
             {
                 GL.BindBuffer(GL.ARRAY_BUFFER, _bufferId);
+
                 fixed (Vertex* temp = &_vertices[0])
-                    GL.BufferData(GL.ARRAY_BUFFER, new IntPtr(sizeof(Vertex) * _length), new IntPtr((void*)temp), GL.STATIC_DRAW);
+                    GL.BufferData(
+                        GL.ARRAY_BUFFER, 
+                        new IntPtr(sizeof(Vertex) * _length), 
+                        new IntPtr((void*)temp), 
+                        GL.STATIC_DRAW
+                    );
 
                 GL.BindBuffer(GL.ARRAY_BUFFER, 0);
             }

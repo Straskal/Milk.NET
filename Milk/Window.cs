@@ -1,5 +1,6 @@
 ﻿using Milk.Graphics;
 using Milk.Graphics.OpenGL;
+using Milk.Input;
 using Milk.Platform;
 using System;
 using System.Runtime.InteropServices;
@@ -43,8 +44,10 @@ namespace Milk
         public Renderer Renderer { get; private set; }
 
         #region Events
+
         public delegate void WindowClosedHandler();
         public event WindowClosedHandler OnCloseRequested;
+
         #endregion
 
         public void PollEvents()

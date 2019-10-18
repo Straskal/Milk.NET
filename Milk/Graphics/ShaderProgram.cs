@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Milk.Graphics
 {
-    internal class ShaderProgram : IDisposable
+    public class ShaderProgram : IDisposable
     {
         internal ShaderProgram(string vertexCode, string fragmentCode)
         {
@@ -33,9 +33,9 @@ namespace Milk.Graphics
             GL.DeleteShader(fragmentShaderId);
         }
 
-        uint Id { get; }
+        public uint Id { get; }
 
-        public void Use()
+        internal void Use()
         {
             GL.UseProgram(Id);
         }

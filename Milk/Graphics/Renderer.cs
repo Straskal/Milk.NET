@@ -3,28 +3,27 @@ using System;
 using System.IO;
 using System.Reflection;
 
+using ShaderSources = Milk.Constants.ShaderSource;
+
 namespace Milk.Graphics
 {
     public class Renderer : IDisposable
     {
-        private readonly ShaderProgram _defaultShaderProgram;
+        public ShaderProgram DefaultShaderProgram { get; }
 
         unsafe internal Renderer()
         {
-            _defaultShaderProgram = LoadEmbeddedShader(
-                "Milk.Graphics.Shaders.DefaultVertexShader.glsl",
-                "Milk.Graphics.Shaders.DefaultFragmentShader.glsl"
+            DefaultShaderProgram = LoadEmbeddedShader(
+                ShaderSources.DefaultVertex,
+                ShaderSources.DefaultFragment
             );
-        }
-
-        public BufferObject CreateBufferObject(BufferObjectAttribute[] attributes, int size)
-        {
-            return new BufferObject(attributes, size);
         }
 
         public BufferObject CreateBufferObject(BufferObjectAttribute[] attributes, Vertex[] vertices)
         {
-            return new BufferObject(attributes, vertices);
+            var buff = new BufferObject(vertices.Length, attributes);
+            buff.AddVertices(vertices);
+            return buff;
         }
 
         public void Clear(float red, float green, float blue, float alpha)
@@ -35,8 +34,13 @@ namespace Milk.Graphics
 
         public void DrawBuffer(BufferObject buffer, BufferDrawMode mode = BufferDrawMode.Points)
         {
-            _defaultShaderProgram.Use();
+            DefaultShaderProgram.Use();
             buffer.Draw(mode);
+        }
+
+        public void Dispose()
+        {
+            DefaultShaderProgram.Dispose();
         }
 
         private ShaderProgram LoadEmbeddedShader(string vertexResourcePath, string fragmentResourcePath)
@@ -54,11 +58,6 @@ namespace Milk.Graphics
                 fragmentShaderCode = streamReader.ReadToEnd();
 
             return new ShaderProgram(vertexShaderCode, fragmentShaderCode);
-        }
-
-        public void Dispose()
-        {
-            _defaultShaderProgram.Dispose();
         }
     }
 }
