@@ -9,7 +9,7 @@ namespace Milk.Graphics
 {
     public class Renderer : IDisposable
     {
-        unsafe internal Renderer()
+        internal Renderer()
         {
             DefaultShaderProgram = LoadEmbeddedShader(
                 ShaderSources.DefaultVertex,
