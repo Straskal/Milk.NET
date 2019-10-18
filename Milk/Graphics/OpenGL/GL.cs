@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Milk.Graphics
+namespace Milk.OpenGL
 {
     internal static class GL
     {

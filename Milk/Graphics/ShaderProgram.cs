@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Milk.OpenGL;
+using System;
 using System.Text;
 
 namespace Milk.Graphics

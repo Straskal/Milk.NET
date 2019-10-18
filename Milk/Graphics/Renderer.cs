@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Milk.OpenGL;
+using System.IO;
 using System.Reflection;
 
 namespace Milk.Graphics
@@ -15,13 +16,23 @@ namespace Milk.Graphics
             );
         }
 
+        public BufferObject CreateBufferObject(int size)
+        {
+            return new BufferObject(size);
+        }
+
+        public BufferObject CreateBufferObject(params Vertex[] vertices)
+        {
+            return new BufferObject(vertices);
+        }
+
         public void Clear(float red, float green, float blue, float alpha)
         {
             GL.ClearColor(red, green, blue, alpha);
             GL.Clear(GL.COLOR_BUFFER_BIT);
         }
 
-        public void DrawBuffer(VertexArray buffer)
+        public void DrawBuffer(BufferObject buffer)
         {
             _defaultShaderProgram.Use();
             buffer.Draw();
