@@ -2,13 +2,11 @@
 {
     public struct BufferObjectAttribute
     {
-        public BufferObjectAttribute(uint offset, int numComponents)
+        public BufferObjectAttribute(int numComponents)
         {
-            Offset = offset;
             NumComponents = numComponents;
         }
 
-        public uint Offset;
         public int NumComponents;
     }
 }

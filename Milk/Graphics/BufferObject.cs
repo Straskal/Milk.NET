@@ -18,7 +18,7 @@ namespace Milk.Graphics
         private int _length;
         private bool _isDirty;
 
-        internal BufferObject(int numVertices, BufferObjectAttribute[] attributes) 
+        internal unsafe BufferObject(int numVertices, BufferObjectAttribute[] attributes) 
         {
             _vertices = new Vertex[numVertices];
             _length = 0;
@@ -29,17 +29,23 @@ namespace Milk.Graphics
             GL.GenBuffers(1, ref _bufferId);
             GL.BindBuffer(GL.ARRAY_BUFFER, _bufferId);
 
+            int stride = 0;
+            for (uint i = 0; i < attributes.Length; i++)
+                stride += attributes[i].NumComponents;
+
+            int offset = 0;
             for (uint i = 0; i < attributes.Length; i++)
             {
-                GL.EnableVertexAttribArray(i);
                 GL.VertexAttribPointer(
-                    attributes[i].Offset, 
+                    i, 
                     attributes[i].NumComponents, 
                     GL.FLOAT, 
-                    false, 
-                    0, 
-                    IntPtr.Zero
+                    false,
+                    stride * sizeof(float), 
+                    new IntPtr((void*)(offset * sizeof(float)))
                 );
+                GL.EnableVertexAttribArray(i);
+                offset += attributes[i].NumComponents + 1;
             }
 
             GL.BindBuffer(GL.ARRAY_BUFFER, 0);
