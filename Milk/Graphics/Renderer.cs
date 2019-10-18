@@ -48,9 +48,9 @@ namespace Milk.Graphics
 
         private ShaderProgram LoadEmbeddedShader(string vertexResourcePath, string fragmentResourcePath)
         {
+            Assembly assembly = typeof(GL).Assembly;
             string vertexShaderCode = string.Empty;
             string fragmentShaderCode = string.Empty;
-            Assembly assembly = typeof(GL).Assembly;
 
             using (Stream shaderStream = assembly.GetManifestResourceStream(vertexResourcePath))
             using (StreamReader streamReader = new StreamReader(shaderStream))
