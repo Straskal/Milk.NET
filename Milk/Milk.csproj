@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <Target Name="CopyThirdParty" AfterTargets="AfterBuild">
-    <Copy SourceFiles="$(SolutionDir)Milk\ThirdParty\Windows\glfw.dll" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="$(SolutionDir)ThirdParty\Windows\glfw.dll" DestinationFolder="$(OutDir)" />
   </Target>
   
 </Project>
