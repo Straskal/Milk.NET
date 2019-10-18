@@ -22,12 +22,19 @@ namespace GameRunner
             using (var window = new Window(windowParams))
             {
                 var buffer = window.Renderer.CreateBufferObject(
-                    new Vertex(0.5f, 0.5f),
-                    new Vertex(0.5f, -0.5f),
-                    new Vertex(-0.5f, 0.5f),
-                    new Vertex(0.5f, -0.5f),
-                    new Vertex(-0.5f, -0.5f),
-                    new Vertex(-0.5f, 0.5f)
+                    new BufferObjectAttribute[] 
+                    {
+                        new BufferObjectAttribute(0, 2)
+                    },
+                    new Vertex[]
+                    {
+                        new Vertex(0.5f, 0.5f),
+                        new Vertex(0.5f, -0.5f),
+                        new Vertex(-0.5f, 0.5f),
+                        new Vertex(0.5f, -0.5f),
+                        new Vertex(-0.5f, -0.5f),
+                        new Vertex(-0.5f, 0.5f)
+                    }
                 );
 
                 window.OnCloseRequested += () => isRunning = false;
@@ -36,7 +43,8 @@ namespace GameRunner
                 do
                 {
                     window.Renderer.Clear(0, 0, 0, 0);
-                    window.Renderer.DrawBuffer(buffer);
+                    window.Renderer.DrawBuffer(buffer, BufferDrawMode.Triangles);
+
                     window.SwapBuffers();
                     window.PollEvents();
                 } while (isRunning);

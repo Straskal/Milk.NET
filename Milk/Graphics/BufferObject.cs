@@ -3,6 +3,12 @@ using System;
 
 namespace Milk.Graphics
 {
+    public enum BufferDrawMode
+    {
+        Points = 0,
+        Triangles = 4,
+    }
+
     public class BufferObject
     {
         private readonly Vertex[] _vertices;
@@ -12,11 +18,12 @@ namespace Milk.Graphics
         private int _length;
         private bool _isDirty;
 
-        internal BufferObject(int numVertices) : this(new Vertex[numVertices])
+        internal BufferObject(BufferObjectAttribute[] attributes, int numVertices) 
+            : this(attributes, new Vertex[numVertices])
         {            
         }
         
-        internal BufferObject(params Vertex[] vertices)
+        internal BufferObject(BufferObjectAttribute[] attributes, Vertex[] vertices)
         {
             _vertices = vertices;
             _length = vertices.Length;
@@ -26,13 +33,18 @@ namespace Milk.Graphics
             GL.BindVertexArray(_id);
             GL.GenBuffers(1, ref _bufferId);
             GL.BindBuffer(GL.ARRAY_BUFFER, _bufferId);
-            GL.EnableVertexAttribArray(0);
-            GL.VertexAttribPointer(0, 2, GL.FLOAT, false, 0, IntPtr.Zero);
+
+            for (uint i = 0; i < attributes.Length; i++)
+            {
+                GL.EnableVertexAttribArray(i);
+                GL.VertexAttribPointer(attributes[i].Offset, attributes[i].NumComponents, GL.FLOAT, false, 0, IntPtr.Zero);
+            }
+
             GL.BindBuffer(GL.ARRAY_BUFFER, 0);
             GL.BindVertexArray(0);
         }
 
-        public void AddVertex(params Vertex[] vertices)
+        public void AddVertices(params Vertex[] vertices)
         {
             if ((_length + vertices.Length) > _vertices.Length)
                 throw new InvalidOperationException("Exceeds vertex limit!");
@@ -49,7 +61,7 @@ namespace Milk.Graphics
             _isDirty = true;
         }
 
-        internal unsafe void Draw()
+        internal unsafe void Draw(BufferDrawMode mode)
         {
             if (_isDirty)
             {
@@ -61,7 +73,7 @@ namespace Milk.Graphics
             }
 
             GL.BindVertexArray(_id);
-            GL.DrawArrays(GL.TRIANGLES, 0, _length);
+            GL.DrawArrays((int)mode, 0, _length);
             GL.BindVertexArray(0);
         }
     }

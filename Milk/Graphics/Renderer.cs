@@ -16,14 +16,14 @@ namespace Milk.Graphics
             );
         }
 
-        public BufferObject CreateBufferObject(int size)
+        public BufferObject CreateBufferObject(BufferObjectAttribute[] attributes, int size)
         {
-            return new BufferObject(size);
+            return new BufferObject(attributes, size);
         }
 
-        public BufferObject CreateBufferObject(params Vertex[] vertices)
+        public BufferObject CreateBufferObject(BufferObjectAttribute[] attributes, Vertex[] vertices)
         {
-            return new BufferObject(vertices);
+            return new BufferObject(attributes, vertices);
         }
 
         public void Clear(float red, float green, float blue, float alpha)
@@ -32,10 +32,10 @@ namespace Milk.Graphics
             GL.Clear(GL.COLOR_BUFFER_BIT);
         }
 
-        public void DrawBuffer(BufferObject buffer)
+        public void DrawBuffer(BufferObject buffer, BufferDrawMode mode = BufferDrawMode.Points)
         {
             _defaultShaderProgram.Use();
-            buffer.Draw();
+            buffer.Draw(mode);
         }
 
         private ShaderProgram LoadEmbeddedShader(string vertexResourcePath, string fragmentResourcePath)

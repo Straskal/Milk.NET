@@ -1,8 +1,5 @@
-﻿using System.Runtime.InteropServices;
-
-namespace Milk.Graphics
+﻿namespace Milk.Graphics
 {
-    [StructLayout(LayoutKind.Sequential)]
     public struct Vertex
     {
         public Vertex(float x, float y)
