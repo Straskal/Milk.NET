@@ -16,7 +16,7 @@ namespace Milk.Graphics
     {
         private readonly Window _window;
         private readonly GLFW.framebuffersizefun _onFrameBufferSizeChanged;
-        private readonly BufferObject<Vertex2f1Rgba> _primitiveBufferObject;
+        private readonly BufferObject<float> _primitiveBufferObject;
 
         private bool _isVsyncEnabled;
 
@@ -32,15 +32,20 @@ namespace Milk.Graphics
             _onFrameBufferSizeChanged = (IntPtr win, int w, int h) => GL.Viewport(0, 0, w, h);
             GLFW.SetFramebufferSizeCallback(window.Handle, Marshal.GetFunctionPointerForDelegate(_onFrameBufferSizeChanged));
 
-            _primitiveBufferObject = new BufferObject<Vertex2f1Rgba>(512, BufferObjectAttribute.DefaultAttributes);
+            _primitiveBufferObject = new BufferObject<float>(
+                new BufferObjectAttribute[]
+                    {
+                        new BufferObjectAttribute<float>(2),
+                        new BufferObjectAttribute<float>(4)
+                    });
 
-            DefaultShaderProgram = LoadEmbeddedShader<Vertex2f1Rgba>(
+            DefaultShaderProgram = LoadEmbeddedShader(
                 ShaderSources.DefaultVertex,
                 ShaderSources.DefaultFragment
             );
         }
 
-        public ShaderProgram<Vertex2f1Rgba> DefaultShaderProgram { get; }
+        public ShaderProgram DefaultShaderProgram { get; }
 
         public bool IsVsyncEnabled
         {
@@ -62,10 +67,10 @@ namespace Milk.Graphics
         /// <param name="size"></param>
         /// <param name="attributes"></param>
         /// <returns></returns>
-        public BufferObject<TVertex> CreateBufferObject<TVertex>(int size, BufferObjectAttribute[] attributes) 
+        public BufferObject<TVertex> CreateBufferObject<TVertex>(BufferObjectAttribute[] attributes)
             where TVertex : unmanaged
         {
-            return new BufferObject<TVertex>(size, attributes);
+            return new BufferObject<TVertex>(attributes);
         }
 
         /// <summary>
@@ -81,9 +86,32 @@ namespace Milk.Graphics
             GL.Clear(GL.COLOR_BUFFER_BIT);
         }
 
+        /// <summary>
+        /// Swap the front and back buffer.
+        /// </summary>
         public void SwapFramebuffer()
         {
             GLFW.SwapBuffers(_window.Handle);
+        }
+
+        // TODO: Convert pixel coordinates to NDC.
+        public void DrawFilledRectangle(float x, float y, float w, float h, float r, float g, float b, float a)
+        {
+            int frameBufferWidth = 0;
+            int frameBufferHeight = 0;
+            GLFW.GetFramebufferSize(_window.Handle, ref frameBufferWidth, ref frameBufferHeight);
+
+            _primitiveBufferObject.Clear();
+            _primitiveBufferObject.AddVertices(
+                x, y, r, g, b, a,           // Top left
+                x + w, y, r, g, b, a,       // Top right
+                x + w, y - h, r, g, b, a,   // Bottom right
+                x, y, r, g, b, a,           // Top left
+                x, y - h, r, g, b, a,       // Bottom left
+                x + w, y - h, r, g, b, a    // Bottom right
+            );
+
+            DrawBufferObject(DefaultShaderProgram, _primitiveBufferObject, BufferDrawMode.Triangles);
         }
 
         /// <summary>
@@ -93,7 +121,7 @@ namespace Milk.Graphics
         /// <param name="shaderProgram"></param>
         /// <param name="buffer"></param>
         /// <param name="mode"></param>
-        public void DrawBufferObject<TVertex>(ShaderProgram<TVertex> shaderProgram, BufferObject<TVertex> buffer, BufferDrawMode mode = BufferDrawMode.Points)
+        public void DrawBufferObject<TVertex>(ShaderProgram shaderProgram, BufferObject<TVertex> buffer, BufferDrawMode mode = BufferDrawMode.Points)
             where TVertex : unmanaged
         {
             shaderProgram.Use();
@@ -106,7 +134,7 @@ namespace Milk.Graphics
             DefaultShaderProgram.Dispose();
         }
 
-        private ShaderProgram<TVertex> LoadEmbeddedShader<TVertex>(string vertexResourcePath, string fragmentResourcePath)
+        private ShaderProgram LoadEmbeddedShader(string vertexResourcePath, string fragmentResourcePath)
         {
             Assembly assembly = typeof(GL).Assembly;
             string vertexShaderCode = string.Empty;
@@ -120,7 +148,7 @@ namespace Milk.Graphics
             using (StreamReader streamReader = new StreamReader(shaderStream))
                 fragmentShaderCode = streamReader.ReadToEnd();
 
-            return new ShaderProgram<TVertex>(vertexShaderCode, fragmentShaderCode);
+            return new ShaderProgram(vertexShaderCode, fragmentShaderCode);
         }
     }
 }

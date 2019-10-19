@@ -1,5 +1,4 @@
 ﻿using Milk;
-using Milk.Graphics;
 using Milk.Input;
 
 namespace GameRunner
@@ -22,19 +21,6 @@ namespace GameRunner
 
             using (var window = new Window(windowParams))
             {
-                var buffer = window.Graphics.CreateBufferObject(
-                    BufferObjectAttribute.DefaultAttributes,
-                    new Vertex2f1Rgba[]
-                    {
-                        new Vertex2f1Rgba(0.5f, 0.5f, 0f, 1f, 0f, 1f),
-                        new Vertex2f1Rgba(0.5f, -0.5f, 0f, 1f, 0f, 1f),
-                        new Vertex2f1Rgba(-0.5f, 0.5f, 0f, 1f, 0f, 1f),
-                        new Vertex2f1Rgba(0.5f, -0.5f, 0f, 1f, 0f, 1f),
-                        new Vertex2f1Rgba(-0.5f, -0.5f, 0f, 1f, 0f, 1f),
-                        new Vertex2f1Rgba(-0.5f, 0.5f, 0f, 1f, 0f, 1f),
-                    }
-                );
-
                 window.OnCloseRequested += () => isRunning = false;
                 Keyboard.OnKeyPressed += (Keys key) => { if (key == Keys.Escape) isRunning = false; };
 
@@ -45,11 +31,9 @@ namespace GameRunner
                 {
                     window.PollEvents();
                     graphics.Clear(0, 0, 0, 0);
-                    graphics.DrawBufferObject(graphics.DefaultShaderProgram, buffer, BufferDrawMode.Triangles);
+                    graphics.DrawFilledRectangle(0f, 0f, 0.5f, 0.5f, 1, 0, 0, 1);
                     graphics.SwapFramebuffer();
                 }
-
-                buffer.Dispose();
             }
         }
     }

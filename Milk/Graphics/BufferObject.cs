@@ -1,5 +1,6 @@
 ﻿using Milk.Graphics.OpenGL;
 using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Milk.Graphics
@@ -17,16 +18,17 @@ namespace Milk.Graphics
     public class BufferObject<TVertex> : IDisposable 
         where TVertex : unmanaged
     {
-        private readonly TVertex[] _vertices;
+        private TVertex[] _vertices;
 
         private uint _id;
         private uint _bufferId;
         private bool _isDirty;
 
-        internal unsafe BufferObject(int size, BufferObjectAttribute[] attributes)
+        internal unsafe BufferObject(BufferObjectAttribute[] attributes)
         {
-            _vertices = new TVertex[size];
+            _vertices = new TVertex[0];
             _isDirty = true;
+            
             Count = 0;
 
             GL.GenVertexArrays(1, ref _id);
@@ -34,24 +36,16 @@ namespace Milk.Graphics
             GL.GenBuffers(1, ref _bufferId);
             GL.BindBuffer(GL.ARRAY_BUFFER, _bufferId);
 
-            int stride = 0;
-            for (uint i = 0; i < attributes.Length; i++)
-                stride += attributes[i].NumComponents;
+            int numAttributeComponents = attributes.Sum(attr => attr.NumComponents);
+            int attributeOffset = 0;
 
-            int offset = 0;
             for (uint i = 0; i < attributes.Length; i++)
             {
-                GL.VertexAttribPointer(
-                    i,
-                    attributes[i].NumComponents,
-                    attributes[i].TypeEnum,
-                    false,
-                    stride * Marshal.SizeOf(attributes[i].Type),
-                    new IntPtr((void*)(offset * Marshal.SizeOf(attributes[i].Type)))
-                );
-
+                int stide = numAttributeComponents * Marshal.SizeOf(attributes[i].Type);
+                IntPtr offset = new IntPtr((void*)(attributeOffset * Marshal.SizeOf(attributes[i].Type)));
+                GL.VertexAttribPointer(i, attributes[i].NumComponents, attributes[i].TypeEnum, false, stide, offset);
                 GL.EnableVertexAttribArray(i);
-                offset += attributes[i].NumComponents;
+                attributeOffset += attributes[i].NumComponents;
             }
 
             GL.BindBuffer(GL.ARRAY_BUFFER, 0);
@@ -74,6 +68,16 @@ namespace Milk.Graphics
         /// <param name="vertices"></param>
         public void AddVertices(params TVertex[] vertices)
         {
+            int currentSize = _vertices.Length;
+            int numVertices = vertices.Length;
+            int newSize = Count + numVertices;
+
+            if (newSize > currentSize)
+            {
+                int doubled = currentSize * 2;
+                Array.Resize(ref _vertices, newSize > doubled ? newSize : doubled);
+            }
+
             for (int i = 0; i < vertices.Length; i++)
                 _vertices[Count++] = vertices[i];
 
