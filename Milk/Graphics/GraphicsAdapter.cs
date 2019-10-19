@@ -1,11 +1,7 @@
 ﻿using Milk.Graphics.OpenGL;
 using Milk.Platform;
 using System;
-using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
-
-using ShaderSources = Milk.Constants.ShaderSource;
 
 namespace Milk.Graphics
 {
@@ -39,10 +35,7 @@ namespace Milk.Graphics
                         new BufferObjectAttribute<float>(4)
                     });
 
-            DefaultShaderProgram = LoadEmbeddedShader(
-                ShaderSources.DefaultVertex,
-                ShaderSources.DefaultFragment
-            );
+            DefaultShaderProgram = ShaderProgram.LoadDefaultShader();
         }
 
         public ShaderProgram DefaultShaderProgram { get; }
@@ -132,23 +125,6 @@ namespace Milk.Graphics
         {
             _primitiveBufferObject.Dispose();
             DefaultShaderProgram.Dispose();
-        }
-
-        private ShaderProgram LoadEmbeddedShader(string vertexResourcePath, string fragmentResourcePath)
-        {
-            Assembly assembly = typeof(GL).Assembly;
-            string vertexShaderCode = string.Empty;
-            string fragmentShaderCode = string.Empty;
-
-            using (Stream shaderStream = assembly.GetManifestResourceStream(vertexResourcePath))
-            using (StreamReader streamReader = new StreamReader(shaderStream))
-                vertexShaderCode = streamReader.ReadToEnd();
-
-            using (Stream shaderStream = assembly.GetManifestResourceStream(fragmentResourcePath))
-            using (StreamReader streamReader = new StreamReader(shaderStream))
-                fragmentShaderCode = streamReader.ReadToEnd();
-
-            return new ShaderProgram(vertexShaderCode, fragmentShaderCode);
         }
     }
 }

@@ -1,11 +1,29 @@
 ﻿using Milk.Graphics.OpenGL;
 using System;
+using System.IO;
+using System.Reflection;
 using System.Text;
+
+using ShaderSources = Milk.Constants.ShaderSource;
 
 namespace Milk.Graphics
 {
+    /// <summary>
+    /// Shaders are required in order to draw vertices.
+    /// </summary>
     public class ShaderProgram : IDisposable
     {
+        internal static ShaderProgram LoadDefaultShader()
+        {
+            Assembly assembly = typeof(ShaderProgram).Assembly;
+
+            using (Stream vertStream = assembly.GetManifestResourceStream(ShaderSources.DefaultVertex))
+            using (Stream fragStream = assembly.GetManifestResourceStream(ShaderSources.DefaultFragment))
+            using (StreamReader vertReader = new StreamReader(vertStream))
+            using (StreamReader fragReader = new StreamReader(fragStream))
+                return new ShaderProgram(vertReader.ReadToEnd(), fragReader.ReadToEnd());
+        }
+
         internal ShaderProgram(string vertexCode, string fragmentCode)
         {
             uint vertexShaderId = GL.CreateShader(GL.VERTEX_SHADER);
@@ -33,16 +51,16 @@ namespace Milk.Graphics
             GL.DeleteShader(fragmentShaderId);
         }
 
-        public uint Id { get; }
-
-        internal void Use()
-        {
-            GL.UseProgram(Id);
-        }
+        internal uint Id { get; }
 
         public void Dispose()
         {
             GL.DeleteProgram(Id);
+        }
+
+        internal void Use()
+        {
+            GL.UseProgram(Id);
         }
 
         private void AssertNoCompileErrors(uint shaderId, string type)

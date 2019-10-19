@@ -15,7 +15,7 @@ namespace Milk.Graphics
     /// BufferObjects are used to send vertices to the GPU.
     /// </summary>
     /// <typeparam name="TVertex"></typeparam>
-    public class BufferObject<TVertex> : IDisposable 
+    public class BufferObject<TVertex> : IDisposable
         where TVertex : unmanaged
     {
         private TVertex[] _vertices;
@@ -28,7 +28,7 @@ namespace Milk.Graphics
         {
             _vertices = new TVertex[0];
             _isDirty = true;
-            
+
             Count = 0;
 
             GL.GenVertexArrays(1, ref _id);
@@ -36,14 +36,13 @@ namespace Milk.Graphics
             GL.GenBuffers(1, ref _bufferId);
             GL.BindBuffer(GL.ARRAY_BUFFER, _bufferId);
 
-            int numAttributeComponents = attributes.Sum(attr => attr.NumComponents);
+            int stride = attributes.Sum(attr => attr.NumComponents * Marshal.SizeOf(attr.Type));
             int attributeOffset = 0;
 
             for (uint i = 0; i < attributes.Length; i++)
             {
-                int stide = numAttributeComponents * Marshal.SizeOf(attributes[i].Type);
-                IntPtr offset = new IntPtr((void*)(attributeOffset * Marshal.SizeOf(attributes[i].Type)));
-                GL.VertexAttribPointer(i, attributes[i].NumComponents, attributes[i].TypeEnum, false, stide, offset);
+                IntPtr offsetPtr = new IntPtr((void*)(attributeOffset * Marshal.SizeOf(attributes[i].Type)));
+                GL.VertexAttribPointer(i, attributes[i].NumComponents, attributes[i].TypeEnum, false, stride, offsetPtr);
                 GL.EnableVertexAttribArray(i);
                 attributeOffset += attributes[i].NumComponents;
             }
@@ -63,7 +62,7 @@ namespace Milk.Graphics
         public int Count { get; private set; }
 
         /// <summary>
-        /// Add vertices to the BufferObject causing the BufferObject to update the GPU.
+        /// Add vertices to the BufferObject causing the BufferObject to update the GPU, updating the buffers size if need be.
         /// </summary>
         /// <param name="vertices"></param>
         public void AddVertices(params TVertex[] vertices)
@@ -109,7 +108,7 @@ namespace Milk.Graphics
                 GL.BindBuffer(GL.ARRAY_BUFFER, _bufferId);
 
                 fixed (TVertex* temp = &_vertices[0])
-                    GL.BufferData( GL.ARRAY_BUFFER, new IntPtr(sizeof(TVertex) * Count), new IntPtr((void*)temp), GL.STATIC_DRAW);
+                    GL.BufferData(GL.ARRAY_BUFFER, new IntPtr(sizeof(TVertex) * Count), new IntPtr((void*)temp), GL.STATIC_DRAW);
 
                 GL.BindBuffer(GL.ARRAY_BUFFER, 0);
             }
