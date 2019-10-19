@@ -56,7 +56,10 @@ namespace Milk.Graphics
             GL.Clear(GL.COLOR_BUFFER_BIT);
         }
 
-        public void DrawBuffer<TVertex>(ShaderProgram shaderProgram, BufferObject<TVertex> buffer, BufferDrawMode mode = BufferDrawMode.Points)
+        public void DrawBuffer<TVertex>(
+            ShaderProgram shaderProgram, 
+            BufferObject<TVertex> buffer, 
+            BufferDrawMode mode = BufferDrawMode.Points)
             where TVertex : unmanaged
         {
             shaderProgram.Use();
