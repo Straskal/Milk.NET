@@ -14,17 +14,21 @@ namespace Milk.Graphics
     /// </summary>
     public class GraphicsAdapter : IDisposable
     {
+        private readonly Window _window;
         private readonly GLFW.framebuffersizefun _onFrameBufferSizeChanged;
         private readonly BufferObject<Vertex2f1Rgba> _primitiveBufferObject;
 
+        private bool _isVsyncEnabled;
+
         internal GraphicsAdapter(Window window)
         {
+            _window = window;
+
             GL.Init(GLFW.GetProcAddress);
             GL.Enable(GL.BLENDING);
             GL.BlendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 
-            GLFW.SwapInterval(1);
-
+            _isVsyncEnabled = false;
             _onFrameBufferSizeChanged = (IntPtr win, int w, int h) => GL.Viewport(0, 0, w, h);
             GLFW.SetFramebufferSizeCallback(window.Handle, Marshal.GetFunctionPointerForDelegate(_onFrameBufferSizeChanged));
 
@@ -40,6 +44,22 @@ namespace Milk.Graphics
         /// The default shader program. Expects position: xy and color: rgba.
         /// </summary>
         public ShaderProgram DefaultShaderProgram { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsVsyncEnabled
+        {
+            get => _isVsyncEnabled;
+            set
+            {
+                if (value != _isVsyncEnabled)
+                {
+                    _isVsyncEnabled = value;
+                    GLFW.SwapInterval(value ? 1 : 0);
+                }
+            }
+        }
 
         /// <summary>
         /// Creates a new BufferObject with the given size and attributes.
@@ -67,6 +87,11 @@ namespace Milk.Graphics
             GL.Clear(GL.COLOR_BUFFER_BIT);
         }
 
+        public void SwapFramebuffer()
+        {
+            GLFW.SwapBuffers(_window.Handle);
+        }
+
         /// <summary>
         /// Draw a BufferObject with the given shader program and draw mode.
         /// </summary>
@@ -74,7 +99,7 @@ namespace Milk.Graphics
         /// <param name="shaderProgram"></param>
         /// <param name="buffer"></param>
         /// <param name="mode"></param>
-        public void DrawBuffer<TVertex>(ShaderProgram shaderProgram, BufferObject<TVertex> buffer, BufferDrawMode mode = BufferDrawMode.Points)
+        public void DrawBufferObject<TVertex>(ShaderProgram shaderProgram, BufferObject<TVertex> buffer, BufferDrawMode mode = BufferDrawMode.Points)
             where TVertex : unmanaged
         {
             shaderProgram.Use();

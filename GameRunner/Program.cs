@@ -39,15 +39,15 @@ namespace GameRunner
                 Keyboard.OnKeyPressed += (Keys key) => { if (key == Keys.Escape) isRunning = false; };
 
                 var graphics = window.Graphics;
+                graphics.IsVsyncEnabled = true;
 
-                do
+                while (isRunning)
                 {
-                    graphics.Clear(0, 0, 0, 0);
-                    graphics.DrawBuffer(graphics.DefaultShaderProgram, buffer, BufferDrawMode.Triangles);
-
-                    window.SwapBuffers();
                     window.PollEvents();
-                } while (isRunning);
+                    graphics.Clear(0, 0, 0, 0);
+                    graphics.DrawBufferObject(graphics.DefaultShaderProgram, buffer, BufferDrawMode.Triangles);
+                    graphics.SwapFramebuffer();
+                }
 
                 buffer.Dispose();
             }

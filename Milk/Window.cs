@@ -54,11 +54,6 @@ namespace Milk
             GLFW.PollEvents();
         }
 
-        public void SwapBuffers()
-        {
-            GLFW.SwapBuffers(Handle);
-        }
-
         public void Dispose()
         {
             Graphics.Dispose();
