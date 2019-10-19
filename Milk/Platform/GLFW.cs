@@ -51,6 +51,12 @@ namespace Milk.Platform
         [DllImport(GLFW_DLL, EntryPoint = "glfwMakeContextCurrent", CallingConvention = CallingConvention.Cdecl)]
         internal static extern void MakeContextCurrent(IntPtr window);
 
+        [DllImport(GLFW_DLL, EntryPoint = "glfwGetFramebufferSize", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void GetFramebufferSize(IntPtr window, ref int width, ref int height);
+
+        [DllImport(GLFW_DLL, EntryPoint = "glfwSwapInterval", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void SwapInterval(int interval);
+
         [DllImport(GLFW_DLL, EntryPoint = "glfwSwapBuffers", CallingConvention = CallingConvention.Cdecl)]
         internal static extern void SwapBuffers(IntPtr window);
 
@@ -61,17 +67,26 @@ namespace Milk.Platform
         internal static extern void PollEvents();
 
         #region Window Events
+
         internal delegate void windowclosefun(IntPtr window);
 
         [DllImport(GLFW_DLL, EntryPoint = "glfwSetWindowCloseCallback", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int SetWindowCloseCallback(IntPtr window, IntPtr cbfun);
+
+        internal delegate void framebuffersizefun(IntPtr window, int width, int height);
+
+        [DllImport(GLFW_DLL, EntryPoint = "glfwSetFramebufferSizeCallback", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int SetFramebufferSizeCallback(IntPtr window, IntPtr cbfun);
+
         #endregion
 
         #region Input Events
+
         internal delegate void keyfun(IntPtr window, int key, int scancode, int action, int mods);
 
         [DllImport(GLFW_DLL, EntryPoint = "glfwSetKeyCallback", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int SetKeyCallback(IntPtr window, IntPtr cbfun);
+
         #endregion
     }
 }

@@ -45,6 +45,7 @@ namespace Milk.Graphics.OpenGL
                     : throw new InvalidOperationException($"Unable to load Function Pointer: {typeof(T).Name}");
             }
 
+            Viewport = LoadOpenGLFunction<glViewport>();
             Enable = LoadOpenGLFunction<glEnable>();
             BlendFunc = LoadOpenGLFunction<glBlendFunc>();
             GenBuffers = LoadOpenGLFunction<glGenBuffers>();
@@ -77,6 +78,9 @@ namespace Milk.Graphics.OpenGL
         internal static extern void DrawArrays(int mode, int first, int count);
 
         #region Function pointers
+
+        internal delegate void glViewport(int x, int y, int w, int h);
+        internal static glViewport Viewport { get; private set; }
 
         internal delegate void glEnable(uint cap);
         internal static glEnable Enable { get; private set; }

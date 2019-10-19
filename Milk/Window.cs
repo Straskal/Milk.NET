@@ -34,9 +34,8 @@ namespace Milk
             Keyboard.Init(Handle);
 
             GLFW.MakeContextCurrent(Handle);
-            GL.Init(GLFW.GetProcAddress);
 
-            Renderer = new Renderer();
+            Renderer = new Renderer(this);
         }
 
         internal IntPtr Handle { get; private set; }

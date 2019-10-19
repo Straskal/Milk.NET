@@ -1,7 +1,9 @@
 ﻿using Milk.Graphics.OpenGL;
+using Milk.Platform;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 using ShaderSources = Milk.Constants.ShaderSource;
 
@@ -9,10 +11,22 @@ namespace Milk.Graphics
 {
     public class Renderer : IDisposable
     {
-        internal Renderer()
+        private readonly GLFW.framebuffersizefun _onFrameBufferSizeChanged;
+
+        private BufferObject _primitiveBufferObject;
+
+        internal Renderer(Window window)
         {
+            GL.Init(GLFW.GetProcAddress);
             GL.Enable(GL.BLENDING);
             GL.BlendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
+
+            GLFW.SwapInterval(1);
+
+            _onFrameBufferSizeChanged = (IntPtr win, int w, int h) => GL.Viewport(0, 0, w, h);
+            GLFW.SetFramebufferSizeCallback(window.Handle, Marshal.GetFunctionPointerForDelegate(_onFrameBufferSizeChanged));
+
+            _primitiveBufferObject = new BufferObject(512, BufferObject.DefaultAttributes);
 
             DefaultShaderProgram = LoadEmbeddedShader(
                 ShaderSources.DefaultVertex,
