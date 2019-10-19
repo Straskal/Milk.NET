@@ -34,20 +34,14 @@ namespace Milk.Graphics
 
             _primitiveBufferObject = new BufferObject<Vertex2f1Rgba>(512, BufferObjectAttribute.DefaultAttributes);
 
-            DefaultShaderProgram = LoadEmbeddedShader(
+            DefaultShaderProgram = LoadEmbeddedShader<Vertex2f1Rgba>(
                 ShaderSources.DefaultVertex,
                 ShaderSources.DefaultFragment
             );
         }
 
-        /// <summary>
-        /// The default shader program. Expects position: xy and color: rgba.
-        /// </summary>
-        public ShaderProgram DefaultShaderProgram { get; }
+        public ShaderProgram<Vertex2f1Rgba> DefaultShaderProgram { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsVsyncEnabled
         {
             get => _isVsyncEnabled;
@@ -99,7 +93,7 @@ namespace Milk.Graphics
         /// <param name="shaderProgram"></param>
         /// <param name="buffer"></param>
         /// <param name="mode"></param>
-        public void DrawBufferObject<TVertex>(ShaderProgram shaderProgram, BufferObject<TVertex> buffer, BufferDrawMode mode = BufferDrawMode.Points)
+        public void DrawBufferObject<TVertex>(ShaderProgram<TVertex> shaderProgram, BufferObject<TVertex> buffer, BufferDrawMode mode = BufferDrawMode.Points)
             where TVertex : unmanaged
         {
             shaderProgram.Use();
@@ -112,7 +106,7 @@ namespace Milk.Graphics
             DefaultShaderProgram.Dispose();
         }
 
-        private ShaderProgram LoadEmbeddedShader(string vertexResourcePath, string fragmentResourcePath)
+        private ShaderProgram<TVertex> LoadEmbeddedShader<TVertex>(string vertexResourcePath, string fragmentResourcePath)
         {
             Assembly assembly = typeof(GL).Assembly;
             string vertexShaderCode = string.Empty;
@@ -126,7 +120,7 @@ namespace Milk.Graphics
             using (StreamReader streamReader = new StreamReader(shaderStream))
                 fragmentShaderCode = streamReader.ReadToEnd();
 
-            return new ShaderProgram(vertexShaderCode, fragmentShaderCode);
+            return new ShaderProgram<TVertex>(vertexShaderCode, fragmentShaderCode);
         }
     }
 }

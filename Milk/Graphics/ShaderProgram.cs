@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Milk.Graphics
 {
-    public class ShaderProgram : IDisposable
+    public class ShaderProgram<TVertex> : IDisposable
     {
         internal ShaderProgram(string vertexCode, string fragmentCode)
         {
