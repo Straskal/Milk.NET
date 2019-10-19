@@ -1,8 +1,8 @@
 ﻿namespace Milk.Graphics
 {
-    public struct PositionColor
+    public struct Vertex2f1Rgba
     {
-        public PositionColor(float x, float y, float r, float g, float b, float a)
+        public Vertex2f1Rgba(float x, float y, float r, float g, float b, float a)
         {
             X = x;
             Y = y;

@@ -17,7 +17,7 @@ namespace Milk.Graphics.OpenGL
 
         internal const int ARRAY_BUFFER = 0x8892;
         internal const int STATIC_DRAW = 0x88E4;
-        internal const int FLOAT = 0x1406;
+        internal const uint FLOAT = 0x1406;
         internal const int TRIANGLES = 0x0004;
         internal const int COLOR_BUFFER_BIT = 0x4000;
         internal const uint VERTEX_SHADER = 35633;

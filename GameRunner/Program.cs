@@ -24,14 +24,14 @@ namespace GameRunner
             {
                 var buffer = window.Graphics.CreateBufferObject(
                     BufferObjectAttribute.DefaultAttributes,
-                    new PositionColor[]
+                    new Vertex2f1Rgba[]
                     {
-                        new PositionColor(0.5f, 0.5f, 0f, 1f, 0f, 1f),
-                        new PositionColor(0.5f, -0.5f, 0f, 1f, 0f, 1f),
-                        new PositionColor(-0.5f, 0.5f, 0f, 1f, 0f, 1f),
-                        new PositionColor(0.5f, -0.5f, 0f, 1f, 0f, 1f),
-                        new PositionColor(-0.5f, -0.5f, 0f, 1f, 0f, 1f),
-                        new PositionColor(-0.5f, 0.5f, 0f, 1f, 0f, 1f),
+                        new Vertex2f1Rgba(0.5f, 0.5f, 0f, 1f, 0f, 1f),
+                        new Vertex2f1Rgba(0.5f, -0.5f, 0f, 1f, 0f, 1f),
+                        new Vertex2f1Rgba(-0.5f, 0.5f, 0f, 1f, 0f, 1f),
+                        new Vertex2f1Rgba(0.5f, -0.5f, 0f, 1f, 0f, 1f),
+                        new Vertex2f1Rgba(-0.5f, -0.5f, 0f, 1f, 0f, 1f),
+                        new Vertex2f1Rgba(-0.5f, 0.5f, 0f, 1f, 0f, 1f),
                     }
                 );
 

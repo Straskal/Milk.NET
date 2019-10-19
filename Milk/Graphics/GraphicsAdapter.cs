@@ -13,7 +13,7 @@ namespace Milk.Graphics
     {
         private readonly GLFW.framebuffersizefun _onFrameBufferSizeChanged;
 
-        private BufferObject<PositionColor> _primitiveBufferObject;
+        private readonly BufferObject<Vertex2f1Rgba> _primitiveBufferObject;
 
         internal GraphicsAdapter(Window window)
         {
@@ -26,7 +26,7 @@ namespace Milk.Graphics
             _onFrameBufferSizeChanged = (IntPtr win, int w, int h) => GL.Viewport(0, 0, w, h);
             GLFW.SetFramebufferSizeCallback(window.Handle, Marshal.GetFunctionPointerForDelegate(_onFrameBufferSizeChanged));
 
-            _primitiveBufferObject = new BufferObject<PositionColor>(512, BufferObjectAttribute.DefaultAttributes);
+            _primitiveBufferObject = new BufferObject<Vertex2f1Rgba>(512, BufferObjectAttribute.DefaultAttributes);
 
             DefaultShaderProgram = LoadEmbeddedShader(
                 ShaderSources.DefaultVertex,
@@ -36,12 +36,18 @@ namespace Milk.Graphics
 
         public ShaderProgram DefaultShaderProgram { get; }
 
-        public BufferObject<TVertex> CreateBufferObject<TVertex>(BufferObjectAttribute[] attributes, TVertex[] vertices) 
+        public BufferObject<TVertex> CreateBufferObject<TVertex>(int size, BufferObjectAttribute[] attributes) 
             where TVertex : unmanaged
         {
-            var buff = new BufferObject<TVertex>(vertices.Length, attributes);
-            buff.AddVertices(vertices);
-            return buff;
+            return new BufferObject<TVertex>(size, attributes);
+        }
+
+        public BufferObject<TVertex> CreateBufferObject<TVertex>(BufferObjectAttribute[] attributes, TVertex[] vertices)
+            where TVertex : unmanaged
+        {
+            var buffer = new BufferObject<TVertex>(vertices.Length, attributes);
+            buffer.AddVertices(vertices);
+            return buffer;
         }
 
         public void Clear(float red, float green, float blue, float alpha)
@@ -59,6 +65,7 @@ namespace Milk.Graphics
 
         public void Dispose()
         {
+            _primitiveBufferObject.Dispose();
             DefaultShaderProgram.Dispose();
         }
 
