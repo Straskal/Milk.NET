@@ -1,5 +1,6 @@
 ﻿using Milk.Graphics.OpenGL;
 using System;
+using System.Runtime.InteropServices;
 
 namespace Milk.Graphics
 {
@@ -9,24 +10,19 @@ namespace Milk.Graphics
         Triangles = 4,
     }
 
-    public class BufferObject : IDisposable
+    public class BufferObject<TVertex> : IDisposable 
+        where TVertex : unmanaged
     {
-        public static BufferObjectAttribute[] DefaultAttributes => new BufferObjectAttribute[] 
-        {
-            new BufferObjectAttribute(2),
-            new BufferObjectAttribute(4)
-        };
-
-        private readonly Vertex[] _vertices;
+        private readonly TVertex[] _vertices;
 
         private uint _id;
         private uint _bufferId;
         private int _length;
         private bool _isDirty;
 
-        internal unsafe BufferObject(int numVertices, BufferObjectAttribute[] attributes) 
+        internal unsafe BufferObject(int numVertices, BufferObjectAttribute[] attributes)
         {
-            _vertices = new Vertex[numVertices];
+            _vertices = new TVertex[numVertices];
             _length = 0;
             _isDirty = true;
 
@@ -43,13 +39,14 @@ namespace Milk.Graphics
             for (uint i = 0; i < attributes.Length; i++)
             {
                 GL.VertexAttribPointer(
-                    i, 
-                    attributes[i].NumComponents, 
-                    GL.FLOAT, 
+                    i,
+                    attributes[i].NumComponents,
+                    GL.FLOAT, // TODO: Changed based on attributes[i].Type
                     false,
-                    stride * sizeof(float), 
-                    new IntPtr((void*)(offset * sizeof(float)))
+                    stride * Marshal.SizeOf(attributes[i].Type),
+                    new IntPtr((void*)(offset * Marshal.SizeOf(attributes[i].Type)))
                 );
+
                 GL.EnableVertexAttribArray(i);
                 offset += attributes[i].NumComponents;
             }
@@ -58,7 +55,7 @@ namespace Milk.Graphics
             GL.BindVertexArray(0);
         }
 
-        public void AddVertices(params Vertex[] vertices)
+        public void AddVertices(params TVertex[] vertices)
         {
             if ((_length + vertices.Length) > _vertices.Length)
                 throw new InvalidOperationException("Exceeds vertex limit!");
@@ -87,11 +84,11 @@ namespace Milk.Graphics
             {
                 GL.BindBuffer(GL.ARRAY_BUFFER, _bufferId);
 
-                fixed (Vertex* temp = &_vertices[0])
+                fixed (TVertex* temp = &_vertices[0])
                     GL.BufferData(
-                        GL.ARRAY_BUFFER, 
-                        new IntPtr(sizeof(Vertex) * _length), 
-                        new IntPtr((void*)temp), 
+                        GL.ARRAY_BUFFER,
+                        new IntPtr(sizeof(TVertex) * _length),
+                        new IntPtr((void*)temp),
                         GL.STATIC_DRAW
                     );
 

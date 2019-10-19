@@ -9,13 +9,13 @@ using ShaderSources = Milk.Constants.ShaderSource;
 
 namespace Milk.Graphics
 {
-    public class Renderer : IDisposable
+    public class GraphicsAdapter : IDisposable
     {
         private readonly GLFW.framebuffersizefun _onFrameBufferSizeChanged;
 
-        private BufferObject _primitiveBufferObject;
+        private BufferObject<PositionColor> _primitiveBufferObject;
 
-        internal Renderer(Window window)
+        internal GraphicsAdapter(Window window)
         {
             GL.Init(GLFW.GetProcAddress);
             GL.Enable(GL.BLENDING);
@@ -26,7 +26,7 @@ namespace Milk.Graphics
             _onFrameBufferSizeChanged = (IntPtr win, int w, int h) => GL.Viewport(0, 0, w, h);
             GLFW.SetFramebufferSizeCallback(window.Handle, Marshal.GetFunctionPointerForDelegate(_onFrameBufferSizeChanged));
 
-            _primitiveBufferObject = new BufferObject(512, BufferObject.DefaultAttributes);
+            _primitiveBufferObject = new BufferObject<PositionColor>(512, BufferObjectAttribute.DefaultAttributes);
 
             DefaultShaderProgram = LoadEmbeddedShader(
                 ShaderSources.DefaultVertex,
@@ -36,9 +36,10 @@ namespace Milk.Graphics
 
         public ShaderProgram DefaultShaderProgram { get; }
 
-        public BufferObject CreateBufferObject(BufferObjectAttribute[] attributes, Vertex[] vertices)
+        public BufferObject<TVertex> CreateBufferObject<TVertex>(BufferObjectAttribute[] attributes, TVertex[] vertices) 
+            where TVertex : unmanaged
         {
-            var buff = new BufferObject(vertices.Length, attributes);
+            var buff = new BufferObject<TVertex>(vertices.Length, attributes);
             buff.AddVertices(vertices);
             return buff;
         }
@@ -49,7 +50,8 @@ namespace Milk.Graphics
             GL.Clear(GL.COLOR_BUFFER_BIT);
         }
 
-        public void DrawBuffer(BufferObject buffer, BufferDrawMode mode = BufferDrawMode.Points)
+        public void DrawBuffer<TVertex>(BufferObject<TVertex> buffer, BufferDrawMode mode = BufferDrawMode.Points)
+            where TVertex : unmanaged
         {
             DefaultShaderProgram.Use();
             buffer.Draw(mode);

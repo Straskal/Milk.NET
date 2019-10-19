@@ -35,12 +35,12 @@ namespace Milk
 
             GLFW.MakeContextCurrent(Handle);
 
-            Renderer = new Renderer(this);
+            Graphics = new GraphicsAdapter(this);
         }
 
         internal IntPtr Handle { get; private set; }
 
-        public Renderer Renderer { get; private set; }
+        public GraphicsAdapter Graphics { get; private set; }
 
         #region Events
 
@@ -61,7 +61,7 @@ namespace Milk
 
         public void Dispose()
         {
-            Renderer.Dispose();
+            Graphics.Dispose();
             GLFW.Terminate();
         }
     }

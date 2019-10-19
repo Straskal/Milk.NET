@@ -22,33 +22,16 @@ namespace GameRunner
 
             using (var window = new Window(windowParams))
             {
-                var buffer = window.Renderer.CreateBufferObject(
-                    BufferObject.DefaultAttributes,
-                    new Vertex[]
+                var buffer = window.Graphics.CreateBufferObject(
+                    BufferObjectAttribute.DefaultAttributes,
+                    new PositionColor[]
                     {
-                        new Vertex(0.5f, 0.5f),
-                        new Vertex(0f, 1f),
-                        new Vertex(0f, 0.2f),
-
-                        new Vertex(0.5f, -0.5f),
-                        new Vertex(0f, 1f),
-                        new Vertex(0f, 1f),
-
-                        new Vertex(-0.5f, 0.5f),
-                        new Vertex(0f, 1f),
-                        new Vertex(0f, 1f),
-
-                        new Vertex(0.5f, -0.5f),
-                        new Vertex(0f, 1f),
-                        new Vertex(0f, 1f),
-
-                        new Vertex(-0.5f, -0.5f),
-                        new Vertex(0f, 1f),
-                        new Vertex(0f, 1f),
-
-                        new Vertex(-0.5f, 0.5f),
-                        new Vertex(0f, 1f),
-                        new Vertex(0f, 1f),
+                        new PositionColor(0.5f, 0.5f, 0f, 1f, 0f, 1f),
+                        new PositionColor(0.5f, -0.5f, 0f, 1f, 0f, 1f),
+                        new PositionColor(-0.5f, 0.5f, 0f, 1f, 0f, 1f),
+                        new PositionColor(0.5f, -0.5f, 0f, 1f, 0f, 1f),
+                        new PositionColor(-0.5f, -0.5f, 0f, 1f, 0f, 1f),
+                        new PositionColor(-0.5f, 0.5f, 0f, 1f, 0f, 1f),
                     }
                 );
 
@@ -57,8 +40,8 @@ namespace GameRunner
 
                 do
                 {
-                    window.Renderer.Clear(0, 0, 0, 0);
-                    window.Renderer.DrawBuffer(buffer, BufferDrawMode.Triangles);
+                    window.Graphics.Clear(0, 0, 0, 0);
+                    window.Graphics.DrawBuffer(buffer, BufferDrawMode.Triangles);
 
                     window.SwapBuffers();
                     window.PollEvents();
