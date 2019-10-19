@@ -38,10 +38,12 @@ namespace GameRunner
                 window.OnCloseRequested += () => isRunning = false;
                 Keyboard.OnKeyPressed += (Keys key) => { if (key == Keys.Escape) isRunning = false; };
 
+                var graphics = window.Graphics;
+
                 do
                 {
-                    window.Graphics.Clear(0, 0, 0, 0);
-                    window.Graphics.DrawBuffer(buffer, BufferDrawMode.Triangles);
+                    graphics.Clear(0, 0, 0, 0);
+                    graphics.DrawBuffer(graphics.DefaultShaderProgram, buffer, BufferDrawMode.Triangles);
 
                     window.SwapBuffers();
                     window.PollEvents();
