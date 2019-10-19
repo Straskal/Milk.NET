@@ -10,6 +10,10 @@ namespace Milk.Graphics
         Triangles = 4,
     }
 
+    /// <summary>
+    /// BufferObjects are used to send vertices to the GPU.
+    /// </summary>
+    /// <typeparam name="TVertex"></typeparam>
     public class BufferObject<TVertex> : IDisposable 
         where TVertex : unmanaged
     {
@@ -22,8 +26,8 @@ namespace Milk.Graphics
         internal unsafe BufferObject(int size, BufferObjectAttribute[] attributes)
         {
             _vertices = new TVertex[size];
-            Count = 0;
             _isDirty = true;
+            Count = 0;
 
             GL.GenVertexArrays(1, ref _id);
             GL.BindVertexArray(_id);
@@ -54,9 +58,20 @@ namespace Milk.Graphics
             GL.BindVertexArray(0);
         }
 
+        /// <summary>
+        /// The underlying size of the BufferObject.
+        /// </summary>
         public int Size => _vertices.Length;
+
+        /// <summary>
+        /// The count of vertices in the BufferObject.
+        /// </summary>
         public int Count { get; private set; }
 
+        /// <summary>
+        /// Add vertices to the BufferObject causing the BufferObject to update the GPU.
+        /// </summary>
+        /// <param name="vertices"></param>
         public void AddVertices(params TVertex[] vertices)
         {
             for (int i = 0; i < vertices.Length; i++)
@@ -65,12 +80,18 @@ namespace Milk.Graphics
             _isDirty = true;
         }
 
+        /// <summary>
+        /// Clear the BufferObject of vertices.
+        /// </summary>
         public void Clear()
         {
             Count = 0;
             _isDirty = true;
         }
 
+        /// <summary>
+        /// Free the vertex memory in the GPU.
+        /// </summary>
         public void Dispose()
         {
             GL.DeleteBuffers(1, ref _bufferId);
@@ -84,12 +105,7 @@ namespace Milk.Graphics
                 GL.BindBuffer(GL.ARRAY_BUFFER, _bufferId);
 
                 fixed (TVertex* temp = &_vertices[0])
-                    GL.BufferData(
-                        GL.ARRAY_BUFFER,
-                        new IntPtr(sizeof(TVertex) * Count),
-                        new IntPtr((void*)temp),
-                        GL.STATIC_DRAW
-                    );
+                    GL.BufferData( GL.ARRAY_BUFFER, new IntPtr(sizeof(TVertex) * Count), new IntPtr((void*)temp), GL.STATIC_DRAW);
 
                 GL.BindBuffer(GL.ARRAY_BUFFER, 0);
             }

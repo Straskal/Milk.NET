@@ -9,10 +9,12 @@ using ShaderSources = Milk.Constants.ShaderSource;
 
 namespace Milk.Graphics
 {
+    /// <summary>
+    /// The GraphicsAdapter provides high level methods of communicating with the GPU.
+    /// </summary>
     public class GraphicsAdapter : IDisposable
     {
         private readonly GLFW.framebuffersizefun _onFrameBufferSizeChanged;
-
         private readonly BufferObject<Vertex2f1Rgba> _primitiveBufferObject;
 
         internal GraphicsAdapter(Window window)
@@ -34,32 +36,45 @@ namespace Milk.Graphics
             );
         }
 
+        /// <summary>
+        /// The default shader program. Expects position: xy and color: rgba.
+        /// </summary>
         public ShaderProgram DefaultShaderProgram { get; }
 
+        /// <summary>
+        /// Creates a new BufferObject with the given size and attributes.
+        /// </summary>
+        /// <typeparam name="TVertex"></typeparam>
+        /// <param name="size"></param>
+        /// <param name="attributes"></param>
+        /// <returns></returns>
         public BufferObject<TVertex> CreateBufferObject<TVertex>(int size, BufferObjectAttribute[] attributes) 
             where TVertex : unmanaged
         {
             return new BufferObject<TVertex>(size, attributes);
         }
 
-        public BufferObject<TVertex> CreateBufferObject<TVertex>(BufferObjectAttribute[] attributes, TVertex[] vertices)
-            where TVertex : unmanaged
-        {
-            var buffer = new BufferObject<TVertex>(vertices.Length, attributes);
-            buffer.AddVertices(vertices);
-            return buffer;
-        }
-
+        /// <summary>
+        /// Clears the framebuffer.
+        /// </summary>
+        /// <param name="red"></param>
+        /// <param name="green"></param>
+        /// <param name="blue"></param>
+        /// <param name="alpha"></param>
         public void Clear(float red, float green, float blue, float alpha)
         {
             GL.ClearColor(red, green, blue, alpha);
             GL.Clear(GL.COLOR_BUFFER_BIT);
         }
 
-        public void DrawBuffer<TVertex>(
-            ShaderProgram shaderProgram, 
-            BufferObject<TVertex> buffer, 
-            BufferDrawMode mode = BufferDrawMode.Points)
+        /// <summary>
+        /// Draw a BufferObject with the given shader program and draw mode.
+        /// </summary>
+        /// <typeparam name="TVertex"></typeparam>
+        /// <param name="shaderProgram"></param>
+        /// <param name="buffer"></param>
+        /// <param name="mode"></param>
+        public void DrawBuffer<TVertex>(ShaderProgram shaderProgram, BufferObject<TVertex> buffer, BufferDrawMode mode = BufferDrawMode.Points)
             where TVertex : unmanaged
         {
             shaderProgram.Use();
