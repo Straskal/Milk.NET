@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Milk.Pltf
+namespace Milk.Platform.Events
 {
     public class WindowCloseRequestedEventArgs : EventArgs
     {

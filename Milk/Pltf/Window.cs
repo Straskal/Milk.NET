@@ -1,18 +1,27 @@
 ﻿using Milk.Gfx;
-using Milk.Pltf.Desktop;
+using Milk.Platform.Desktop;
+using Milk.Platform.Events;
 using System;
 
-namespace Milk.Pltf
+namespace Milk.Platform
 {
     public abstract class Window : IDisposable
     {
+        /// <summary>
+        /// Returns a Window for the current platform.
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public static Window Create(WindowParameters parameters)
         {
             return new GLFWWindow(parameters);
         }
 
         internal abstract IntPtr Handle { get; }
-        internal abstract Platform Platform { get; }
+
+        internal abstract int FramebufferWidth { get; }
+        internal abstract int FramebufferHeight { get; }
+        internal abstract Func<string, IntPtr> GetProcAddress { get; }
 
         public abstract int Width { get; protected set; }
         public abstract int Height { get; protected set; }

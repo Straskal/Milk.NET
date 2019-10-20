@@ -1,15 +1,19 @@
 ﻿using Milk.Gfx;
 using Milk.Input;
+using Milk.Platform.Events;
 using System;
 using System.Runtime.InteropServices;
 
-namespace Milk.Pltf.Desktop
+namespace Milk.Platform.Desktop
 {
     internal class GLFWWindow : Window
     {
         private readonly GLFW.windowclosefun _closeRequested;
         private readonly GLFW.windowsizefun _sizeChanged;
         private readonly GLFW.framebuffersizefun _framebufferSizeChanged;
+
+        private int _frameBufferWidth;
+        private int _frameBufferHeight;
 
         internal GLFWWindow(WindowParameters parameters)
         {         
@@ -28,13 +32,13 @@ namespace Milk.Pltf.Desktop
             if (Handle == IntPtr.Zero)
                 throw new InvalidOperationException("Could not create Glfw window!");
 
-            // Until this structured in a better fashion, GLFW.MakeContextCurrent must be called before creating our Graphics object.
-            GLFW.MakeContextCurrent(Handle);
-
+            _frameBufferWidth = parameters.Width;
+            _frameBufferHeight = parameters.Height;
             Width = parameters.Width;
             Height = parameters.Height;
 
-            Platform = new GLFWPlatform();
+            // Must be called before creating our graphics object.
+            GLFW.MakeContextCurrent(Handle);
             Graphics = new Graphics(this);
 
             _closeRequested = (IntPtr window) =>
@@ -51,6 +55,8 @@ namespace Milk.Pltf.Desktop
 
             _framebufferSizeChanged = (IntPtr window, int w, int h) =>
             {
+                _frameBufferWidth = w;
+                _frameBufferHeight = h;
                 PublishFramebufferSizeChangedEvent(new FramebufferSizeChangedEventArgs(w, h));
             };
 
@@ -63,7 +69,10 @@ namespace Milk.Pltf.Desktop
         }
 
         internal override IntPtr Handle { get; }
-        internal override Platform Platform { get; }
+
+        internal override int FramebufferWidth => _frameBufferWidth;
+        internal override int FramebufferHeight => _frameBufferHeight;
+        internal override Func<string, IntPtr> GetProcAddress => GLFW.GetProcAddress;
 
         public override int Width { get; protected set; }
         public override int Height { get; protected set; }

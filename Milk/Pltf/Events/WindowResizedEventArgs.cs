@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Milk.Pltf
+namespace Milk.Platform.Events
 {
-    public class FramebufferSizeChangedEventArgs : EventArgs
+    public class WindowResizedEventArgs : EventArgs
     {
-        public FramebufferSizeChangedEventArgs(int width, int height)
+        public WindowResizedEventArgs(int width, int height)
         {
             Width = width;
             Height = height;

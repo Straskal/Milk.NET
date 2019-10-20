@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 /*
     Milk already depends on GLFW, so I don't want to also depend on a third party interop library, so we have our own.
 */
-namespace Milk.Pltf.Desktop
+namespace Milk.Platform.Desktop
 {
     internal static class GLFW
     {

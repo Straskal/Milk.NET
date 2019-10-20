@@ -1,4 +1,4 @@
-﻿using Milk.Pltf.Desktop;
+﻿using Milk.Platform.Desktop;
 using System;
 using System.Runtime.InteropServices;
 

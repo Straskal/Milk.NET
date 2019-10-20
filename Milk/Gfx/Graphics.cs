@@ -1,7 +1,7 @@
 ﻿using GlmNet;
 using Milk.Gfx.OpenGL;
-using Milk.Pltf;
-using Milk.Pltf.Desktop;
+using Milk.Platform;
+using Milk.Platform.Events;
 using System;
 
 namespace Milk.Gfx
@@ -22,7 +22,7 @@ namespace Milk.Gfx
         {
             _window = window;
 
-            GL.Init(_window.Platform.GetProcAddress);
+            GL.Init(_window.GetProcAddress);
             GL.Enable(GL.BLENDING);
             GL.BlendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 
@@ -89,12 +89,6 @@ namespace Milk.Gfx
 
         public void DrawFilledRectangle(float x, float y, float w, float h, float r, float g, float b, float a)
         {
-            int frameBufferWidth = 0;
-            int frameBufferHeight = 0;
-
-            // TODO: Remove all GLFW references from graphics device.
-            GLFW.GetFramebufferSize(_window.Handle, ref frameBufferWidth, ref frameBufferHeight);
-
             _defaultBufferObject.Clear();
             _defaultBufferObject.AddVertices(
                 x, y, r, g, b, a,           // Top left
@@ -104,8 +98,8 @@ namespace Milk.Gfx
                 x, y - h, r, g, b, a,       // Bottom left
                 x + w, y - h, r, g, b, a    // Bottom right
             );
-            _defaultShaderProgram.SetMat4Uniform("projectionMatrix", _orthoProjection);
 
+            _defaultShaderProgram.SetMatrix4x4Uniform("projectionMatrix", _orthoProjection);
             DrawBufferObject(_defaultShaderProgram, _defaultBufferObject, BufferDrawMode.Triangles);
         }
 
