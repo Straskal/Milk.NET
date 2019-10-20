@@ -28,6 +28,7 @@ namespace Milk.Pltf.Desktop
             if (Handle == IntPtr.Zero)
                 throw new InvalidOperationException("Could not create Glfw window!");
 
+            // Until this structured in a better fashion, GLFW.MakeContextCurrent must be called before creating our Graphics object.
             GLFW.MakeContextCurrent(Handle);
 
             Width = parameters.Width;
