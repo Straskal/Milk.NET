@@ -13,7 +13,7 @@ namespace Milk.Gfx
     {
         private readonly Window _window;
         private readonly ShaderProgram _defaultShaderProgram;
-        private readonly BufferObject<float> _defaultBufferObject;
+        private readonly BufferObject<VertexPosRgba> _defaultBufferObject;
 
         private bool _isVsyncEnabled;
         private mat4 _orthoProjection;
@@ -29,7 +29,7 @@ namespace Milk.Gfx
             _isVsyncEnabled = false;
             _orthoProjection = glm.ortho(0f, _window.Width, _window.Height, 0f, 0f, 1f);
 
-            _defaultBufferObject = new BufferObject<float>(
+            _defaultBufferObject = new BufferObject<VertexPosRgba>(
                 new BufferObjectAttribute[]
                     {
                         new BufferObjectAttribute<float>(2),
@@ -91,12 +91,12 @@ namespace Milk.Gfx
         {
             _defaultBufferObject.Clear();
             _defaultBufferObject.AddVertices(
-                x, y, r, g, b, a,           // Top left
-                x + w, y, r, g, b, a,       // Top right
-                x + w, y - h, r, g, b, a,   // Bottom right
-                x, y, r, g, b, a,           // Top left
-                x, y - h, r, g, b, a,       // Bottom left
-                x + w, y - h, r, g, b, a    // Bottom right
+                new VertexPosRgba(x, y, r, g, b, a),            // Top left
+                new VertexPosRgba(x + w, y, r, g, b, a),        // Top right
+                new VertexPosRgba(x + w, y - h, r, g, b, a),    // Bottom right
+                new VertexPosRgba(x, y, r, g, b, a),            // Top left
+                new VertexPosRgba(x, y - h, r, g, b, a),        // Bottom left
+                new VertexPosRgba(x + w, y - h, r, g, b, a)     // Bottom right
             );
 
             _defaultShaderProgram.SetMatrix4x4Uniform("projectionMatrix", _orthoProjection);
