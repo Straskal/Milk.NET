@@ -1,9 +1,9 @@
-﻿using Milk.Graphics.OpenGL;
+﻿using Milk.Gfx.OpenGL;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace Milk.Graphics
+namespace Milk.Gfx
 {
     public enum BufferDrawMode
     {

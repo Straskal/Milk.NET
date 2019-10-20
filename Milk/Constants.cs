@@ -4,8 +4,8 @@
     {
         internal static class ShaderSource
         {
-            internal const string DefaultVertex = "Milk.Graphics.Shaders.DefaultVertexShader.glsl";
-            internal const string DefaultFragment = "Milk.Graphics.Shaders.DefaultFragmentShader.glsl";
+            internal const string DefaultVertex = "Milk.Gfx.Shaders.DefaultVertexShader.glsl";
+            internal const string DefaultFragment = "Milk.Gfx.Shaders.DefaultFragmentShader.glsl";
         }
     }
 }

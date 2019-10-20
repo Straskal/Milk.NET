@@ -7,7 +7,7 @@ using System.Text;
 
     https://docs.factorcode.org/content/article-handbook.html is a great resource for constants/enum value lookups.
 */
-namespace Milk.Graphics.OpenGL
+namespace Milk.Gfx.OpenGL
 {
     internal static class GL
     {

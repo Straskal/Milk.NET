@@ -10,8 +10,8 @@
     <Content Remove="Graphics/Shaders/DefaultFragmentShader.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Graphics/Shaders/DefaultVertexShader.glsl" />
-    <EmbeddedResource Include="Graphics/Shaders/DefaultFragmentShader.glsl" />
+    <EmbeddedResource Include="Gfx\Shaders\DefaultVertexShader.glsl" />
+    <EmbeddedResource Include="Gfx\Shaders\DefaultFragmentShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glm\Glm.csproj" />

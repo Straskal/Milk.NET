@@ -1,8 +1,8 @@
-﻿using Milk.Graphics.OpenGL;
+﻿using Milk.Gfx.OpenGL;
 using System;
 using System.Collections.Generic;
 
-namespace Milk.Graphics
+namespace Milk.Gfx
 {
     /// <summary>
     /// BufferObjectAttributes determine how the BufferObject's vertices are passed to the shader pipeline.

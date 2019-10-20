@@ -1,14 +1,15 @@
 ﻿using GlmNet;
-using Milk.Graphics.OpenGL;
-using Milk.Platform;
+using Milk.Gfx.OpenGL;
+using Milk.Pltf;
+using Milk.Pltf.Desktop;
 using System;
 
-namespace Milk.Graphics
+namespace Milk.Gfx
 {
     /// <summary>
     /// The GraphicsAdapter provides high level methods of communicating with the GPU.
     /// </summary>
-    public class GraphicsAdapter : IDisposable
+    public class Graphics : IDisposable
     {
         private readonly Window _window;
         private readonly ShaderProgram _defaultShaderProgram;
@@ -17,11 +18,11 @@ namespace Milk.Graphics
         private bool _isVsyncEnabled;
         private mat4 _orthoProjection;
 
-        internal GraphicsAdapter(Window window)
+        internal Graphics(Window window)
         {
             _window = window;
 
-            GL.Init(GLFW.GetProcAddress); // TODO: Remove all GLFW references from graphics device.
+            GL.Init(_window.Platform.GetProcAddress); // TODO: Remove all GLFW references from graphics device.
             GL.Enable(GL.BLENDING);
             GL.BlendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 
@@ -48,7 +49,7 @@ namespace Milk.Graphics
                 if (value != _isVsyncEnabled)
                 {
                     _isVsyncEnabled = value;
-                    GLFW.SwapInterval(value ? 1 : 0); // TODO: Remove GLFW reference
+                    _window.ToggleVsync(_isVsyncEnabled);
                 }
             }
         }
@@ -84,7 +85,7 @@ namespace Milk.Graphics
         /// </summary>
         public void SwapFramebuffer()
         {
-            GLFW.SwapBuffers(_window.Handle); // TODO: Remove glfw reference
+            _window.SwapFramebuffers();
         }
 
         public void DrawFilledRectangle(float x, float y, float w, float h, float r, float g, float b, float a)

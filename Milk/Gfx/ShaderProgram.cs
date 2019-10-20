@@ -1,5 +1,5 @@
 ﻿using GlmNet;
-using Milk.Graphics.OpenGL;
+using Milk.Gfx.OpenGL;
 using System;
 using System.IO;
 using System.Reflection;
@@ -7,7 +7,7 @@ using System.Text;
 
 using ShaderSources = Milk.Constants.ShaderSource;
 
-namespace Milk.Graphics
+namespace Milk.Gfx
 {
     /// <summary>
     /// Shaders are required in order to draw vertices.

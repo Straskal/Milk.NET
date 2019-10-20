@@ -1,5 +1,5 @@
 ﻿using Milk.Input;
-using Milk.Platform;
+using Milk.Pltf;
 
 namespace GameRunner
 {
@@ -19,7 +19,7 @@ namespace GameRunner
                 IsFullscreen = false
             };
 
-            using (var window = new Window(windowParams))
+            using (var window = Window.Create(windowParams))
             {
                 window.CloseRequested += (object sender, WindowCloseRequestedEventArgs e) => isRunning = false;
                 Keyboard.OnKeyPressed += (Keys key) => { if (key == Keys.Escape) isRunning = false; };

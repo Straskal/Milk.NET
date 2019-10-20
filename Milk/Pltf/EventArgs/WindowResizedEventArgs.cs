@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Milk.Platform
+namespace Milk.Pltf
 {
     public class WindowResizedEventArgs : EventArgs
     {
