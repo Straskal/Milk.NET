@@ -37,7 +37,6 @@ namespace Milk.Gfx
                     });
 
             _defaultShaderProgram = ShaderProgram.LoadDefaultShader();
-
             _window.FramebufferSizeChanged += OnFramebufferSizeChanged;
         }
 
@@ -125,7 +124,6 @@ namespace Milk.Gfx
         public void Dispose()
         {
             _window.FramebufferSizeChanged -= OnFramebufferSizeChanged;
-
             _defaultBufferObject.Dispose();
             _defaultShaderProgram.Dispose();
         }
