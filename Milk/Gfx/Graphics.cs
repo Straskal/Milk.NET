@@ -22,7 +22,7 @@ namespace Milk.Gfx
         {
             _window = window;
 
-            GL.Init(_window.Platform.GetProcAddress); // TODO: Remove all GLFW references from graphics device.
+            GL.Init(_window.Platform.GetProcAddress);
             GL.Enable(GL.BLENDING);
             GL.BlendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 
@@ -91,6 +91,8 @@ namespace Milk.Gfx
         {
             int frameBufferWidth = 0;
             int frameBufferHeight = 0;
+
+            // TODO: Remove all GLFW references from graphics device.
             GLFW.GetFramebufferSize(_window.Handle, ref frameBufferWidth, ref frameBufferHeight);
 
             _defaultBufferObject.Clear();
