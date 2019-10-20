@@ -68,24 +68,26 @@ namespace Milk.Platform
 
         #region Window Events
 
-        internal delegate void windowclosefun(IntPtr window);
 
         [DllImport(GLFW_DLL, EntryPoint = "glfwSetWindowCloseCallback", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int SetWindowCloseCallback(IntPtr window, IntPtr cbfun);
+        internal delegate void windowclosefun(IntPtr window);
 
-        internal delegate void framebuffersizefun(IntPtr window, int width, int height);
+        [DllImport(GLFW_DLL, EntryPoint = "glfwSetWindowSizeCallback", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int SetWindowSizeCallback(IntPtr window, IntPtr cbfun);
+        internal delegate void windowsizefun(IntPtr window, int width, int height);
 
         [DllImport(GLFW_DLL, EntryPoint = "glfwSetFramebufferSizeCallback", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int SetFramebufferSizeCallback(IntPtr window, IntPtr cbfun);
+        internal delegate void framebuffersizefun(IntPtr window, int width, int height);
 
         #endregion
 
         #region Input Events
 
-        internal delegate void keyfun(IntPtr window, int key, int scancode, int action, int mods);
-
         [DllImport(GLFW_DLL, EntryPoint = "glfwSetKeyCallback", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int SetKeyCallback(IntPtr window, IntPtr cbfun);
+        internal delegate void keyfun(IntPtr window, int key, int scancode, int action, int mods);
 
         #endregion
     }

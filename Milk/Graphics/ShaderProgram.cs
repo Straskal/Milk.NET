@@ -1,4 +1,5 @@
-﻿using Milk.Graphics.OpenGL;
+﻿using GlmNet;
+using Milk.Graphics.OpenGL;
 using System;
 using System.IO;
 using System.Reflection;
@@ -52,6 +53,12 @@ namespace Milk.Graphics
         }
 
         internal uint Id { get; }
+
+        public unsafe void SetMat4Uniform(string name, mat4 mat)
+        {
+            fixed (float* matPtr = &mat.to_array()[0])
+               GL.UniformMatrix4fv(GL.GetUniformLocation(Id, name), 1, 0, new IntPtr((void*)matPtr));
+        }
 
         public void Dispose()
         {

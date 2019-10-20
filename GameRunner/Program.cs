@@ -1,5 +1,5 @@
-﻿using Milk;
-using Milk.Input;
+﻿using Milk.Input;
+using Milk.Platform;
 
 namespace GameRunner
 {
@@ -21,7 +21,7 @@ namespace GameRunner
 
             using (var window = new Window(windowParams))
             {
-                window.OnCloseRequested += () => isRunning = false;
+                window.CloseRequested += (object sender, WindowCloseRequestedEventArgs e) => isRunning = false;
                 Keyboard.OnKeyPressed += (Keys key) => { if (key == Keys.Escape) isRunning = false; };
 
                 var graphics = window.Graphics;
@@ -31,7 +31,7 @@ namespace GameRunner
                 {
                     window.PollEvents();
                     graphics.Clear(0, 0, 0, 0);
-                    graphics.DrawFilledRectangle(0f, 0f, 0.5f, 0.5f, 1, 0, 0, 1);
+                    graphics.DrawFilledRectangle(100f, 200f, 100f, 100f, 1, 0, 0, 1);
                     graphics.SwapFramebuffer();
                 }
             }

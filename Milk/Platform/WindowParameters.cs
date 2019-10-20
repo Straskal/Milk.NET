@@ -1,4 +1,4 @@
-﻿namespace Milk
+﻿namespace Milk.Platform
 {
     public struct WindowParameters
     {

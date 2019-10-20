@@ -72,6 +72,8 @@ namespace Milk.Graphics.OpenGL
             DeleteShader = LoadOpenGLFunction<glDeleteShader>();
             UseProgram = LoadOpenGLFunction<glUseProgram>();
             DeleteProgram = LoadOpenGLFunction<glDeleteProgram>();
+            GetUniformLocation = LoadOpenGLFunction<glGetUniformLocation>();
+            UniformMatrix4fv = LoadOpenGLFunction<glUniformMatrix4fv>();
         }
 
         [DllImport(OPENGL_DLL, EntryPoint = "glDrawArrays")]
@@ -159,6 +161,12 @@ namespace Milk.Graphics.OpenGL
 
         internal delegate void glDeleteProgram(uint program);
         internal static glDeleteProgram DeleteProgram { get; private set; }
+
+        internal delegate int glGetUniformLocation(uint program, string name);
+        internal static glGetUniformLocation GetUniformLocation { get; private set; }
+
+        internal delegate void glUniformMatrix4fv(int location, int count, int transpose, IntPtr value);
+        internal static glUniformMatrix4fv UniformMatrix4fv { get; private set; }
 
         #endregion
     }

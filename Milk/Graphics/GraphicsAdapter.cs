@@ -1,7 +1,7 @@
-﻿using Milk.Graphics.OpenGL;
+﻿using GlmNet;
+using Milk.Graphics.OpenGL;
 using Milk.Platform;
 using System;
-using System.Runtime.InteropServices;
 
 namespace Milk.Graphics
 {
@@ -11,34 +11,34 @@ namespace Milk.Graphics
     public class GraphicsAdapter : IDisposable
     {
         private readonly Window _window;
-        private readonly GLFW.framebuffersizefun _onFrameBufferSizeChanged;
-        private readonly BufferObject<float> _primitiveBufferObject;
+        private readonly ShaderProgram _defaultShaderProgram;
+        private readonly BufferObject<float> _defaultBufferObject;
 
         private bool _isVsyncEnabled;
+        private mat4 _orthoProjection;
 
         internal GraphicsAdapter(Window window)
         {
             _window = window;
 
-            GL.Init(GLFW.GetProcAddress);
+            GL.Init(GLFW.GetProcAddress); // TODO: Remove all GLFW references from graphics device.
             GL.Enable(GL.BLENDING);
             GL.BlendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 
             _isVsyncEnabled = false;
-            _onFrameBufferSizeChanged = (IntPtr win, int w, int h) => GL.Viewport(0, 0, w, h);
-            GLFW.SetFramebufferSizeCallback(window.Handle, Marshal.GetFunctionPointerForDelegate(_onFrameBufferSizeChanged));
+            _orthoProjection = glm.ortho(0f, _window.Width, _window.Height, 0f, 0f, 1f);
 
-            _primitiveBufferObject = new BufferObject<float>(
+            _defaultBufferObject = new BufferObject<float>(
                 new BufferObjectAttribute[]
                     {
                         new BufferObjectAttribute<float>(2),
                         new BufferObjectAttribute<float>(4)
                     });
 
-            DefaultShaderProgram = ShaderProgram.LoadDefaultShader();
-        }
+            _defaultShaderProgram = ShaderProgram.LoadDefaultShader();
 
-        public ShaderProgram DefaultShaderProgram { get; }
+            _window.FramebufferSizeChanged += OnFramebufferSizeChanged;
+        }
 
         public bool IsVsyncEnabled
         {
@@ -48,7 +48,7 @@ namespace Milk.Graphics
                 if (value != _isVsyncEnabled)
                 {
                     _isVsyncEnabled = value;
-                    GLFW.SwapInterval(value ? 1 : 0);
+                    GLFW.SwapInterval(value ? 1 : 0); // TODO: Remove GLFW reference
                 }
             }
         }
@@ -84,18 +84,17 @@ namespace Milk.Graphics
         /// </summary>
         public void SwapFramebuffer()
         {
-            GLFW.SwapBuffers(_window.Handle);
+            GLFW.SwapBuffers(_window.Handle); // TODO: Remove glfw reference
         }
 
-        // TODO: Convert pixel coordinates to NDC.
         public void DrawFilledRectangle(float x, float y, float w, float h, float r, float g, float b, float a)
         {
             int frameBufferWidth = 0;
             int frameBufferHeight = 0;
             GLFW.GetFramebufferSize(_window.Handle, ref frameBufferWidth, ref frameBufferHeight);
 
-            _primitiveBufferObject.Clear();
-            _primitiveBufferObject.AddVertices(
+            _defaultBufferObject.Clear();
+            _defaultBufferObject.AddVertices(
                 x, y, r, g, b, a,           // Top left
                 x + w, y, r, g, b, a,       // Top right
                 x + w, y - h, r, g, b, a,   // Bottom right
@@ -103,8 +102,9 @@ namespace Milk.Graphics
                 x, y - h, r, g, b, a,       // Bottom left
                 x + w, y - h, r, g, b, a    // Bottom right
             );
+            _defaultShaderProgram.SetMat4Uniform("projectionMatrix", _orthoProjection);
 
-            DrawBufferObject(DefaultShaderProgram, _primitiveBufferObject, BufferDrawMode.Triangles);
+            DrawBufferObject(_defaultShaderProgram, _defaultBufferObject, BufferDrawMode.Triangles);
         }
 
         /// <summary>
@@ -123,8 +123,16 @@ namespace Milk.Graphics
 
         public void Dispose()
         {
-            _primitiveBufferObject.Dispose();
-            DefaultShaderProgram.Dispose();
+            _window.FramebufferSizeChanged -= OnFramebufferSizeChanged;
+
+            _defaultBufferObject.Dispose();
+            _defaultShaderProgram.Dispose();
+        }
+
+        private void OnFramebufferSizeChanged(object sender, FramebufferSizeChangedEventArgs eventArgs)
+        {
+            GL.Viewport(0, 0, eventArgs.Width, eventArgs.Height);
+            _orthoProjection = glm.ortho(0f, eventArgs.Width, eventArgs.Height, 0f, 0f, 1f);
         }
     }
 }

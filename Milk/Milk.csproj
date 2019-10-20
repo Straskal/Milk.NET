@@ -13,6 +13,9 @@
     <EmbeddedResource Include="Graphics/Shaders/DefaultVertexShader.glsl" />
     <EmbeddedResource Include="Graphics/Shaders/DefaultFragmentShader.glsl" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Glm\Glm.csproj" />
+  </ItemGroup>
 
   <Target Name="CopyThirdParty" AfterTargets="AfterBuild">
     <Copy SourceFiles="$(SolutionDir)ThirdParty\Windows\glfw.dll" DestinationFolder="$(OutDir)" />
