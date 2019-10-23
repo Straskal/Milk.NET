@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="bin\Debug\netcoreapp2.1\glfw.dll" />
+    <None Include="bin\Debug\netcoreapp2.1\Assets\punkb.png" />
   </ItemGroup>
 
   <ItemGroup>

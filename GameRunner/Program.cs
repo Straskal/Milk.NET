@@ -1,10 +1,12 @@
-﻿using Milk;
+﻿using Milk.Input;
+using Milk.Platform;
+using Milk.Platform.Events;
 
 namespace GameRunner
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             bool isRunning = true;
 
@@ -18,18 +20,21 @@ namespace GameRunner
                 IsFullscreen = false
             };
 
-            using (var window = new Window(windowParams))
+            using (var window = Window.Create(windowParams))
             {
-                window.OnCloseRequested += () => isRunning = false;
+                window.CloseRequested += (object sender, WindowCloseRequestedEventArgs e) => isRunning = false;
                 Keyboard.OnKeyPressed += (Keys key) => { if (key == Keys.Escape) isRunning = false; };
 
-                do
+                var graphics = window.Graphics;
+                graphics.IsVsyncEnabled = true;
+
+                while (isRunning)
                 {
-                    window.Renderer.Clear(0, 0, 0, 0);
-                    window.Renderer.DrawTriangle();
-                    window.SwapBuffers();
                     window.PollEvents();
-                } while (isRunning);
+                    graphics.Clear(0, 0, 0, 0);
+                    graphics.DrawFilledRectangle(100f, 200f, 100f, 100f, 1, 0, 0, 1);
+                    graphics.SwapFramebuffer();
+                }
             }
         }
     }

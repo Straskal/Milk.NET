@@ -1,10 +1,8 @@
-﻿using Milk.Platform;
+﻿using Milk.Platform.Desktop;
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 
-namespace Milk
+namespace Milk.Input
 {
     public enum Keys
     {

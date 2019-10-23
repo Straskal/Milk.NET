@@ -1,10 +1,30 @@
-﻿using System;
+﻿using GlmNet;
+using Milk.Gfx.OpenGL;
+using System;
+using System.IO;
+using System.Reflection;
 using System.Text;
 
-namespace Milk.Graphics
+using ShaderSources = Milk.Constants.ShaderSource;
+
+namespace Milk.Gfx
 {
-    internal class ShaderProgram : IDisposable
+    /// <summary>
+    /// Shaders are required in order to draw vertices.
+    /// </summary>
+    public class ShaderProgram : IDisposable
     {
+        internal static ShaderProgram LoadDefaultShader()
+        {
+            Assembly assembly = typeof(ShaderProgram).Assembly;
+
+            using (Stream vertStream = assembly.GetManifestResourceStream(ShaderSources.DefaultVertex))
+            using (Stream fragStream = assembly.GetManifestResourceStream(ShaderSources.DefaultFragment))
+            using (StreamReader vertReader = new StreamReader(vertStream))
+            using (StreamReader fragReader = new StreamReader(fragStream))
+                return new ShaderProgram(vertReader.ReadToEnd(), fragReader.ReadToEnd());
+        }
+
         internal ShaderProgram(string vertexCode, string fragmentCode)
         {
             uint vertexShaderId = GL.CreateShader(GL.VERTEX_SHADER);
@@ -32,16 +52,22 @@ namespace Milk.Graphics
             GL.DeleteShader(fragmentShaderId);
         }
 
-        uint Id { get; }
+        internal uint Id { get; }
 
-        public void Use()
+        public unsafe void SetMatrix4x4Uniform(string name, mat4 mat)
         {
-            GL.UseProgram(Id);
+            fixed (float* matPtr = &mat.to_array()[0])
+               GL.UniformMatrix4fv(GL.GetUniformLocation(Id, name), 1, 0, new IntPtr((void*)matPtr));
         }
 
         public void Dispose()
         {
             GL.DeleteProgram(Id);
+        }
+
+        internal void Use()
+        {
+            GL.UseProgram(Id);
         }
 
         private void AssertNoCompileErrors(uint shaderId, string type)
