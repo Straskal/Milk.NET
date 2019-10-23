@@ -14,6 +14,7 @@ namespace Milk.Platform
         /// <returns></returns>
         public static Window Create(WindowParameters parameters)
         {
+            // Right now, milk only officially supports desktop.
             return new GLFWWindow(parameters);
         }
 
@@ -21,7 +22,6 @@ namespace Milk.Platform
 
         internal abstract int FramebufferWidth { get; }
         internal abstract int FramebufferHeight { get; }
-        internal abstract Func<string, IntPtr> GetProcAddress { get; }
 
         public abstract int Width { get; protected set; }
         public abstract int Height { get; protected set; }
@@ -71,6 +71,8 @@ namespace Milk.Platform
 
         #endregion
 
+        internal abstract void MakeGLContextCurrent();
+        internal abstract IntPtr GetProcAddress(string name);
         internal abstract void ToggleVsync(bool toggle);
         internal abstract void SwapFramebuffers();
 

@@ -72,7 +72,6 @@ namespace Milk.Platform.Desktop
 
         internal override int FramebufferWidth => _frameBufferWidth;
         internal override int FramebufferHeight => _frameBufferHeight;
-        internal override Func<string, IntPtr> GetProcAddress => GLFW.GetProcAddress;
 
         public override int Width { get; protected set; }
         public override int Height { get; protected set; }
@@ -104,6 +103,16 @@ namespace Milk.Platform.Desktop
         internal override void SwapFramebuffers()
         {
             GLFW.SwapBuffers(Handle);
+        }
+
+        internal override void MakeGLContextCurrent()
+        {
+            GLFW.MakeContextCurrent(Handle);
+        }
+
+        internal override IntPtr GetProcAddress(string name)
+        {
+            return GLFW.GetProcAddress(name);
         }
     }
 }

@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="bin\Debug\netcoreapp2.1\Assets\punkb.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Milk\Milk.csproj" />
   </ItemGroup>
 

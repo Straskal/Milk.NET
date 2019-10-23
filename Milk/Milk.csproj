@@ -14,6 +14,9 @@
     <EmbeddedResource Include="Gfx\Shaders\DefaultFragmentShader.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0007" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Glm\Glm.csproj" />
   </ItemGroup>
 

@@ -2,6 +2,9 @@
 using Milk.Gfx.OpenGL;
 using Milk.Platform;
 using Milk.Platform.Events;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
+using SixLabors.ImageSharp.PixelFormats;
 using System;
 
 namespace Milk.Gfx
@@ -21,6 +24,7 @@ namespace Milk.Gfx
         internal Graphics(Window window)
         {
             _window = window;
+            _window.MakeGLContextCurrent();
 
             GL.Init(_window.GetProcAddress);
             GL.Enable(GL.BLENDING);
@@ -98,7 +102,6 @@ namespace Milk.Gfx
                 new VertexPosRgba(x, y - h, r, g, b, a),        // Bottom left
                 new VertexPosRgba(x + w, y - h, r, g, b, a)     // Bottom right
             );
-
             _defaultShaderProgram.SetMatrix4x4Uniform("projectionMatrix", _orthoProjection);
             DrawBufferObject(_defaultShaderProgram, _defaultBufferObject, BufferDrawMode.Triangles);
         }

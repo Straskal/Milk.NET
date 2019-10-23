@@ -168,6 +168,9 @@ namespace Milk.Gfx.OpenGL
         internal delegate void glUniformMatrix4fv(int location, int count, int transpose, IntPtr value);
         internal static glUniformMatrix4fv UniformMatrix4fv { get; private set; }
 
+        internal delegate void glGenTextures(int count, ref uint texture);
+        internal static glGenTextures GenTextures { get; }
+
         #endregion
     }
 }
